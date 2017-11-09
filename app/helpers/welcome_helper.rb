@@ -4,6 +4,7 @@ module WelcomeHelper
 
 	def start
 
+	end
 
 
 end
