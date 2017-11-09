@@ -10,32 +10,28 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171109001119) do
-
-  create_table "album_bies", force: :cascade do |t|
-    t.string "album_id"
-    t.string "artist_id"
-  end
+ActiveRecord::Schema.define(version: 20171109001054) do
 
   create_table "albums", force: :cascade do |t|
-    t.string "album_id"
-    t.string "album_name"
-    t.date   "release_date"
+    t.string  "album_id"
+    t.string  "album_type"
+    t.string  "artist_id"
+    t.string  "genre"
+    t.string  "release_date"
+    t.string  "album_name"
+    t.integer "popularity"
   end
 
   create_table "artists", force: :cascade do |t|
-    t.string "artist_id"
-    t.string "name"
+    t.string  "artist_id"
+    t.string  "name"
+    t.integer "popularity"
+    t.string  "genre"
   end
 
   create_table "follows_playlists", force: :cascade do |t|
     t.string "user_id"
     t.string "playlist_id"
-  end
-
-  create_table "in_albums", force: :cascade do |t|
-    t.string "track_id"
-    t.string "album_id"
   end
 
   create_table "playlist_contains", force: :cascade do |t|
@@ -61,17 +57,24 @@ ActiveRecord::Schema.define(version: 20171109001119) do
     t.string "name"
   end
 
-  create_table "track_bies", force: :cascade do |t|
-    t.string "track_id"
-    t.string "artist_id"
-  end
-
   create_table "tracks", force: :cascade do |t|
     t.string  "track_id"
     t.string  "album_id"
     t.string  "song_name"
     t.integer "popularity"
-    t.string  "artist"
+    t.string  "artist_id"
+    t.float   "acousticness"
+    t.float   "danceability"
+    t.float   "energy"
+    t.float   "instrumentalness"
+    t.integer "key"
+    t.float   "liveness"
+    t.float   "loudness"
+    t.integer "mode"
+    t.float   "speechiness"
+    t.float   "tempo"
+    t.integer "time_signature"
+    t.float   "valence"
   end
 
 end
