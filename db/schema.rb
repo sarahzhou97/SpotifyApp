@@ -56,9 +56,9 @@ ActiveRecord::Schema.define(version: 20171109001119) do
 
   create_table "spotify_users", force: :cascade do |t|
     t.string "user_id"
-    t.date   "birthdate"
+    t.string "birthdate"
+    t.string "country"
     t.string "name"
-    t.string "image"
   end
 
   create_table "track_bies", force: :cascade do |t|
@@ -68,10 +68,10 @@ ActiveRecord::Schema.define(version: 20171109001119) do
 
   create_table "tracks", force: :cascade do |t|
     t.string  "track_id"
+    t.string  "album_id"
     t.string  "song_name"
-    t.date    "releasedate"
-    t.integer "tempo"
-    t.string  "genre"
+    t.integer "popularity"
+    t.string  "artist"
   end
 
 end
