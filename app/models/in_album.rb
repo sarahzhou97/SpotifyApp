@@ -1,0 +1,2 @@
+class InAlbum < ApplicationRecord
+end
