@@ -29,8 +29,8 @@ Implemented database schema, tested database, started designing website (fronten
 
 * Emily: Designed new front end 
 * Luke: Test Queries/ Queries for getting data from the database
-* Nikhil: connecting to spotify api, getting data from spotify, adjusting queries 
-* Sarah: Connecting to database, inserting from rspotify output to database, setting up rails routes, controller, models, and schemas
+* Nikhil: Connecting to spotify api, getting data from spotify, adjusting queries 
+* Sarah: Connecting to spotify api, getting data from spotify api; inserting from rspotify output to database; setting up rails routes, views, controller, models, and schemas
 * Zach: connecting to spotify api, getting data from spotify
 
 
