@@ -1,0 +1,53 @@
+<%= content_for(:sidebar) do %>
+  <%= render :partial => "layouts/sidebar" %>
+<% end %>
+
+<div class="col-sm-9">
+  <div class="row jumbotron">
+    <h1>hello, _______ </h1>
+    <p>Here's what we know about you so far:</p>
+    <div class="col-sm-4">
+      <%= pie_chart({"R&B" => 10, "Pop" => 5},
+                    height:"200px", 
+                    width: "100%", 
+                    donut: "true") %>
+    </div>
+    <div class="col-sm-4">
+      <%= line_chart({"Jan" => 10, "March" => 23, "July" => 123, "August" => 215, "October" => 34},
+                    height:"200px", 
+                    width: "100%") %>
+    </div>
+    <div class="col-sm-4">
+      <%= column_chart({"Jan" => 10, "March" => 23, "July" => 123, "August" => 215, "October" => 34},
+                      height:"200px", 
+                      width: "100%") %>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-sm-4">
+      <h3><%= link_to "Top Songs", "#" %></h3>
+      <ul>
+        <li>"Baby" - Justin Bieber</li>
+        <li>"Everytime We Touch" - Cascada</li>
+        <li>"Bye Bye Bye" - NSYNC</li>
+      </ul>
+    </div>
+    <div class="col-sm-4">
+      <h3><%= link_to "Top Artists", "#" %></h3>
+      <ul>
+        <li>Justin Bieber </li>
+        <li>Cascada</li>
+        <li>NSYNC</li>
+      </ul>
+    </div>
+    <div class="col-sm-4">
+      <h3><%= link_to "Top Genres", "#" %></h3>
+      <ul>
+        <li>Pop</li>
+        <li>R&amp;B</li>
+        <li>Country</li>
+      </ul>
+    </div>
+    
+  </div>
+</div>
