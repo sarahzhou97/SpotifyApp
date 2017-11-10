@@ -2,7 +2,7 @@ Rails.application.routes.draw do
   get 'welcome/index'
   root 'welcome#index'
 
-get 'https://sleepy-fjord-10699.herokuapp.com//auth/spotify/callback', to: 'welcome#create_new_user'
+get 'https://sleepy-fjord-10699.herokuapp.com/auth/spotify/callback', to: 'welcome#create_new_user'
 
 get 'homepage/home'
 
