@@ -17,11 +17,11 @@ class WelcomeController < ApplicationController
   	@spotify_user = SpotifyUser.new(:user_id => rspotify_user.id,:name =>rspotify_user.display_name)
   	@spotify_user.save
 
-  	# @playlists = rspotify_user.playlists(limit: 5)
+  	@playlists = rspotify_user.playlists(limit: 5)
 
-  	# for playlist in @playlists do
-   #  		add_playlist(playlist,rspotify_user.id)
-  	# end
+  	for playlist in @playlists do
+    		add_playlist(playlist,rspotify_user.id)
+  	end
 
     @tracks = rspotify_user.saved_tracks(limit: 5)
 
@@ -142,7 +142,7 @@ top_n_users_2_sql = 'select user_id from
 
 
 
-top_n_tracks_overall_sql = 'select t1.track_id from
+top_n_tracks_overall_sql = 'select t1.track_id, t1.song_name from
     (select saveds.track_id, tracks.song_name, count(*) from saveds
     join tracks on tracks.track_id=saveds.track_id
     group by saveds.track_id, song_name
