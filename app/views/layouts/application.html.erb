@@ -1,22 +1,22 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>SpotifyApp</title>
+    <title>Musaic</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <%= csrf_meta_tags %>
     <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
+    <%= javascript_include_tag "https://www.gstatic.com/charts/loader.js" %>
     <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
   	<%= render "layouts/shim" %>
+  	<%= yield :charts_js %>
   </head>
 
   <body class="<% controller_name %> <%= action_name %>">
-  	<div class="container-fluid">
+  	<div class="container">
   		<div class="row">
   			<%= yield :sidebar %>
   			<%= yield %>
   		</div>
   	</div>
-  	<%= yield :footer %>
-    <%= yield %>
   </body>
 </html>
