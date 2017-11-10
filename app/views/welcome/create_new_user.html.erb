@@ -1,6 +1,54 @@
-<% @playlists.each do |playlist| %>
-  <p><%=playlist.name%></p>
+<h2>Top n Spotify users in databased ordered by number of common songs saved with current user</h2>
+<% @top_n_users.each do |user| %>
+  <p><%=user%></p>
 <% end %>
-<% @tracks.each do |track| %>
-  <p><%=track.name%></p>
+<h2>Top n albums based on how many of the album's songs the user has saved</h2>
+<% @top_n_albums.each do |album| %>
+  <p><%=album%></p>
+<% end %>
+<h2>Top n artists based on how many of the artists's songs the user has saved</h2>
+<% @top_n_artists.each do |artist| %>
+  <p><%=artist%></p>
+<% end %>
+<h2>Top n songs to recommend to the user that is of one of the user's top x genres, ordered by how closely they match the average tempo of user's saved songs</h2>
+<% @top_n_songs_recs.each do |song| %>
+  <p><%=song%></p>
+<% end %>
+
+<h2>top n playlists based on how closely the avg temp of playlist matches avg tempo of current users saved songs</h2>
+<% @top_n_playlists.each do |playlist| %>
+  <p><%=playlist%></p>
+<% end %>
+
+<h2>top n genres based on users saved songs</h2>
+<% @top_n_genres.each do |genre| %>
+  <p><%=genre%></p>
+<% end %>
+<h2>top n users based on how many playlists created by them the current user follows</h2>
+<% @top_n_users_1.each do |user| %>
+  <p><%=user%></p>
+<% end %>
+<h2>top n users based on how many playlists created by the the current user that they follow</h2>
+<% @top_n_users_2.each do |user| %>
+  <p><%=user%></p>
+<% end %>
+<h2>Top n songs ordered by number of users that have saved it</h2>
+<% @top_n_tracks_overall.each do |user| %>
+  <p><%=user%></p>
+<% end %>
+<h2>top n albums with the most songs</h2>
+<% @top_n_albums_overall.each do |album| %>
+  <p><%=album%></p>
+<% end %>
+<h2>Top n artists ordered by number of users that have saved their songs</h2>
+<% @top_n_artists_overall.each do |artist| %>
+  <p><%=artist%></p>
+<% end %>
+<h2>Top n playlists ordered by number of users that have followed it</h2>
+<% @top_n_playlists_overall.each do |artist| %>
+  <p><%=artist%></p>
+<% end %>
+<h2>top n albums since x date based on how many songs in it have been saved by users since x</h2>
+<% @top_n_albums_by_num_saved_overall.each do |album| %>
+  <p><%=album%></p>
 <% end %>
