@@ -3,7 +3,7 @@ require 'rspotify'
 
 class WelcomeController < ApplicationController
 
-
+  $spotify_user
 
   def index
   	
@@ -13,11 +13,11 @@ class WelcomeController < ApplicationController
   end
 
   def database_data
-    run_queries_global(@@spotify_user.user_id)
+    run_queries_global($spotify_user.user_id)
   end
 
   def user_data
-    run_queries_user(@@spotify_user.user_id)
+    run_queries_user($spotify_user.user_id)
   end
 
   def create_new_user
@@ -25,8 +25,8 @@ class WelcomeController < ApplicationController
   	rspotify_user = RSpotify::User.new(request.env['omniauth.auth'])
 
 
-  	@@spotify_user = SpotifyUser.new(:user_id => rspotify_user.id,:name =>rspotify_user.display_name)
-  	@@spotify_user.save
+  	$spotify_user = SpotifyUser.new(:user_id => rspotify_user.id,:name =>rspotify_user.display_name)
+  	$spotify_user.save
 
   	@playlists = rspotify_user.playlists(limit: 5)
 
