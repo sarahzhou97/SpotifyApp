@@ -1,3 +1,58 @@
+<%= content_for(:sidebar) do %>
+  <%= render :partial => "layouts/sidebar" %>
+<% end %>
+
+<div class="col-sm-9">
+  <div class="row jumbotron">
+    <h1>hello, <%=@spotify_user.name%> </h1>
+    <p>Here's what we know about you so far:</p>
+    <div class="col-sm-4">
+      <%= pie_chart({"R&B" => 10, "Pop" => 5},
+                    height:"200px", 
+                    width: "100%", 
+                    donut: "true") %>
+    </div>
+    <div class="col-sm-4">
+      <%= line_chart({"Jan" => 10, "March" => 23, "July" => 123, "August" => 215, "October" => 34},
+                    height:"200px", 
+                    width: "100%") %>
+    </div>
+    <div class="col-sm-4">
+      <%= column_chart({"Jan" => 10, "March" => 23, "July" => 123, "August" => 215, "October" => 34},
+                      height:"200px", 
+                      width: "100%") %>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-sm-4">
+      <h3>Most Similar Users</h3>
+      <ul>
+        <% @top_n_users.each do |user| %>
+          <li><%=user%></li>
+        <% end %>
+      </ul>
+    </div>
+    <div class="col-sm-4">
+      <h3>Top Albums</h3>
+      <ul>
+        <% @top_n_albums.each do |album| %>
+          <p><%=album%></p>
+        <% end %>
+      </ul>
+    </div>
+    <div class="col-sm-4">
+      <h3><%= link_to "Top Genres", "#" %></h3>
+      <ul>
+        <li>Pop</li>
+        <li>R&amp;B</li>
+        <li>Country</li>
+      </ul>
+    </div>
+    
+  </div>
+</div>
+
+
 <h2>Top n Spotify users in databased ordered by number of common songs saved with current user</h2>
 <% @top_n_users.each do |user| %>
   <p><%=user%></p>
