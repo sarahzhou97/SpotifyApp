@@ -2,4 +2,133 @@
   <%= render :partial => "layouts/sidebar" %>
 <% end %>
 
-<%= render "layouts/user_data_template" %>
+<div class="col-sm-9">
+  <div class="row jumbotron">
+    <h1>Hello, <%=@@spotify_user.name%> </h1>
+    <p>Here's what we know about you so far:</p>
+    <div class="col-sm-4">
+      <%= pie_chart({"R&B" => 10, "Pop" => 5},
+                    height:"200px", 
+                    width: "100%", 
+                    donut: "true") %>
+    </div>
+    <div class="col-sm-4">
+      <%= line_chart({"Jan" => 10, "March" => 23, "July" => 123, "August" => 215, "October" => 34},
+                    height:"200px", 
+                    width: "100%") %>
+    </div>
+    <div class="col-sm-4">
+      <%= column_chart({"Jan" => 10, "March" => 23, "July" => 123, "August" => 215, "October" => 34},
+                      height:"200px", 
+                      width: "100%") %>
+    </div>
+  </div>
+  <div class="row">
+  <h2>Most Similar Users Based On:</h2>
+
+  <div class="col-sm-4">
+      <h3>Saved Songs</h3>
+      <ul>
+        <% @top_n_users.each do |user| %>
+          <li><%=user%></li>
+        <% end %>
+      </ul>
+    </div>
+
+    <div class="col-sm-4">
+      <h3>Playlists You Follow</h3>
+      <ul>
+        <% @top_n_users_1.each do |user| %>
+  <p><%=user%></p>
+<% end %>
+      </ul>
+    </div>
+
+    <div class="col-sm-4">
+      <h3>Playlists You Created</h3>
+      <ul>
+        <% @top_n_users_2.each do |user| %>
+  <p><%=user%></p>
+<% end %>
+      </ul>
+    </div>
+    </div>
+<div class="row">
+    <h2>Other Data:</h2>
+
+    <div class="col-sm-4">
+      <h3>Top Albums</h3>
+      <ul>
+        <% @top_n_albums.each do |album| %>
+          <p><%=album%></p>
+        <% end %>
+      </ul>
+    </div>
+    <div class="col-sm-4">
+      <h3>Top Artists</h3>
+      <ul>
+        <% @top_n_artists.each do |artist| %>
+          <p><%=artist%></p>
+        <% end %>
+      </ul>
+    </div>
+
+    <div class="col-sm-4">
+      <h3>Top Songs</h3>
+      <% @top_n_songs_recs.each do |song| %>
+        <p><%=song%></p>
+      <% end %>
+    </div>
+
+     <div class="col-sm-4">
+      <h3>Top Playlists</h3>
+      <% @top_n_playlists.each do |playlist| %>
+       <p><%=playlist%></p>
+      <% end %>
+    </div>
+
+    <div class="col-sm-4">
+      <h3>Top Genres</h3>
+        <% @top_n_genres.each do |genre| %>
+            <p><%=genre%></p>
+        <% end %>
+    </div>
+    
+  </div>
+</div>
+
+
+<h2>Top n Spotify users in databased ordered by number of common songs saved with current user</h2>
+<% @top_n_users.each do |user| %>
+  <p><%=user%></p>
+<% end %>
+<h2>Top n albums based on how many of the album's songs the user has saved</h2>
+<% @top_n_albums.each do |album| %>
+  <p><%=album%></p>
+<% end %>
+<h2>Top n artists based on how many of the artists's songs the user has saved</h2>
+<% @top_n_artists.each do |artist| %>
+  <p><%=artist%></p>
+<% end %>
+<h2>Top n songs to recommend to the user that is of one of the user's top x genres, ordered by how closely they match the average tempo of user's saved songs</h2>
+<% @top_n_songs_recs.each do |song| %>
+  <p><%=song%></p>
+<% end %>
+
+<h2>top n playlists based on how closely the avg temp of playlist matches avg tempo of current users saved songs</h2>
+<% @top_n_playlists.each do |playlist| %>
+  <p><%=playlist%></p>
+<% end %>
+
+<h2>top n genres based on users saved songs</h2>
+<% @top_n_genres.each do |genre| %>
+  <p><%=genre%></p>
+<% end %>
+<h2>top n users based on how many playlists created by them the current user follows</h2>
+<% @top_n_users_1.each do |user| %>
+  <p><%=user%></p>
+<% end %>
+<h2>top n users based on how many playlists created by the the current user that they follow</h2>
+<% @top_n_users_2.each do |user| %>
+  <p><%=user%></p>
+<% end %>
