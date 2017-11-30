@@ -1,0 +1,88 @@
+<%= content_for(:sidebar) do %>
+  <%= render :partial => "layouts/sidebar" %>
+<% end %>
+
+<div class="col-sm-9">
+  <div class="row jumbotron">
+    <h1>hello, <%=@@spotify_user.name%> </h1>
+    <p>Here's what we know about you so far:</p>
+    <div class="col-sm-4">
+      <%= pie_chart({"R&B" => 10, "Pop" => 5},
+                    height:"200px", 
+                    width: "100%", 
+                    donut: "true") %>
+    </div>
+    <div class="col-sm-4">
+      <%= line_chart({"Jan" => 10, "March" => 23, "July" => 123, "August" => 215, "October" => 34},
+                    height:"200px", 
+                    width: "100%") %>
+    </div>
+    <div class="col-sm-4">
+      <%= column_chart({"Jan" => 10, "March" => 23, "July" => 123, "August" => 215, "October" => 34},
+                      height:"200px", 
+                      width: "100%") %>
+    </div>
+  </div>
+  <div class="row">
+
+
+    <div class="col-sm-4">
+      <h3>Top Albums</h3>
+      <ul>
+        <% @top_n_albums_overall.each do |album| %>
+  <p><%=album%></p>
+<% end %>
+      </ul>
+    </div>
+    <div class="col-sm-4">
+      <h3>Top Artists</h3>
+      <ul>
+        <% @top_n_artists_overall.each do |artist| %>
+  <p><%=artist%></p>
+<% end %>
+      </ul>
+    </div>
+
+    <div class="col-sm-4">
+      <h3>Top Songs</h3>
+      <% @top_n_tracks_overall.each do |user| %>
+  <p><%=user%></p>
+<% end %>
+    </div>
+
+     <div class="col-sm-4">
+      <h3>Top Playlists</h3>
+      <% @top_n_playlists_overall.each do |artist| %>
+  <p><%=artist%></p>
+<% end %>
+    </div>
+ <div class="col-sm-4">
+      <h3>Top Genres</h3>
+      <% @top_n_genres_by_num_saved_overall.each do |artist| %>
+  <p><%=artist%></p>
+<% end %>
+    </div>
+
+  </div>
+</div>
+
+<h2>Top n songs ordered by number of users that have saved it</h2>
+<% @top_n_tracks_overall.each do |user| %>
+  <p><%=user%></p>
+<% end %>
+<h2>top n albums with the most songs</h2>
+<% @top_n_albums_overall.each do |album| %>
+  <p><%=album%></p>
+<% end %>
+<h2>Top n artists ordered by number of users that have saved their songs</h2>
+<% @top_n_artists_overall.each do |artist| %>
+  <p><%=artist%></p>
+<% end %>
+<h2>Top n playlists ordered by number of users that have followed it</h2>
+<% @top_n_playlists_overall.each do |artist| %>
+  <p><%=artist%></p>
+<% end %>
+<h2>top n albums since x date based on how many songs in it have been saved by users since x</h2>
+<% @top_n_albums_by_num_saved_overall.each do |album| %>
+  <p><%=album%></p>
+<% end %>

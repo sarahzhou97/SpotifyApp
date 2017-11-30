@@ -3,6 +3,7 @@ require 'rspotify'
 
 class WelcomeController < ApplicationController
 
+
   def index
   	
   end
@@ -10,12 +11,21 @@ class WelcomeController < ApplicationController
   def start
   end
 
+  def database_data
+    run_queries_global(@@spotify_user.user_id)
+  end
+
+  def user_data
+    run_queries_user(@@spotify_user.user_id)
+  end
+
   def create_new_user
   	RSpotify::authenticate("313d26163a7e40cab6a7d08ea0c15df7", "c777ed8256104fd8b28465c61bc56a9c")
   	rspotify_user = RSpotify::User.new(request.env['omniauth.auth'])
 
-  	@spotify_user = SpotifyUser.new(:user_id => rspotify_user.id,:name =>rspotify_user.display_name)
-  	@spotify_user.save
+
+  	@@spotify_user = SpotifyUser.new(:user_id => rspotify_user.id,:name =>rspotify_user.display_name)
+  	@@spotify_user.save
 
   	@playlists = rspotify_user.playlists(limit: 5)
 
@@ -31,11 +41,67 @@ class WelcomeController < ApplicationController
       saved.save
   	end
 
-    run_queries(rspotify_user.id)
+    run_queries_user(rspotify_user.id)
 
   end
 
-  def run_queries(id)
+  def run_queries_global(id)
+top_n_tracks_overall_sql = 'select t1.track_id, t1.song_name from
+    (select saveds.track_id, tracks.song_name, count(*) from saveds
+    join tracks on tracks.track_id=saveds.track_id
+    group by saveds.track_id, song_name
+    order by count) t1
+  limit 2;'
+
+
+@top_n_tracks_overall = ActiveRecord::Base.connection.execute(top_n_tracks_overall_sql)
+
+top_n_playlists_overall_sql = 'select t1.playlist_id, t1.playlist_name from
+    (select playlists.playlist_id, playlists.playlist_name, count(*) 
+    from follows_playlists
+    join playlists on follows_playlists.playlist_id = playlists.playlist_id
+    group by playlists.playlist_id, playlists.playlist_name
+    order by count) t1
+  limit 2;'
+
+  @top_n_playlists_overall = ActiveRecord::Base.connection.execute(top_n_playlists_overall_sql)
+
+top_n_artists_overall_sql = 'select t1.artist_id, t1.name from
+    (select artists.artist_id,artists.name, count(*) 
+    from saveds join tracks on saveds.track_id = tracks.track_id
+    join artists on artists.artist_id = tracks.artist_id
+    group by artists.artist_id, artists.name
+    order by count) t1
+  limit 2;'
+
+@top_n_artists_overall = ActiveRecord::Base.connection.execute(top_n_artists_overall_sql)
+
+top_n_albums_overall_sql = 'select t1.album_name 
+  from (select album_name, count(*) as count
+    from albums, tracks
+    where albums.album_id=tracks.album_id
+    group by album_name
+    order by count) as t1
+limit 2;
+'
+
+@top_n_albums_overall=ActiveRecord::Base.connection.execute(top_n_albums_overall_sql)
+
+top_n_albums_by_num_saved_overall_sql = "select t1.album_name from
+    (select albums.album_id, albums.album_name, count(*) as count
+      from saveds join tracks on saveds.track_id = tracks.track_id
+      join albums on albums.album_id = tracks.album_id
+      group by albums.album_id, albums.album_name
+      order by count
+      ) as t1, albums
+    where albums.release_date >= '2000-01-01' and albums.album_id = t1.album_id
+  limit 2;"
+
+  @top_n_albums_by_num_saved_overall=ActiveRecord::Base.connection.execute(top_n_albums_by_num_saved_overall_sql)
+end
+
+
+  def run_queries_user(id)
 
 
 
@@ -136,64 +202,6 @@ top_n_users_2_sql = 'select user_id from
   limit 2;'
 
   @top_n_users_2 = ActiveRecord::Base.connection.execute(top_n_users_2_sql)
-
-
-
-
-
-
-top_n_tracks_overall_sql = 'select t1.track_id, t1.song_name from
-    (select saveds.track_id, tracks.song_name, count(*) from saveds
-    join tracks on tracks.track_id=saveds.track_id
-    group by saveds.track_id, song_name
-    order by count) t1
-  limit 2;'
-
-
-@top_n_tracks_overall = ActiveRecord::Base.connection.execute(top_n_tracks_overall_sql)
-
-top_n_playlists_overall_sql = 'select t1.playlist_id, t1.playlist_name from
-    (select playlists.playlist_id, playlists.playlist_name, count(*) 
-    from follows_playlists
-    join playlists on follows_playlists.playlist_id = playlists.playlist_id
-    group by playlists.playlist_id, playlists.playlist_name
-    order by count) t1
-  limit 2;'
-
-  @top_n_playlists_overall = ActiveRecord::Base.connection.execute(top_n_playlists_overall_sql)
-
-top_n_artists_overall_sql = 'select t1.artist_id, t1.name from
-    (select artists.artist_id,artists.name, count(*) 
-    from saveds join tracks on saveds.track_id = tracks.track_id
-    join artists on artists.artist_id = tracks.artist_id
-    group by artists.artist_id, artists.name
-    order by count) t1
-  limit 2;'
-
-@top_n_artists_overall = ActiveRecord::Base.connection.execute(top_n_artists_overall_sql)
-
-top_n_albums_overall_sql = 'select t1.album_name 
-  from (select album_name, count(*) as count
-    from albums, tracks
-    where albums.album_id=tracks.album_id
-    group by album_name
-    order by count) as t1
-limit 2;
-'
-
-@top_n_albums_overall=ActiveRecord::Base.connection.execute(top_n_albums_overall_sql)
-
-top_n_albums_by_num_saved_overall_sql = "select t1.album_name from
-    (select albums.album_id, albums.album_name, count(*) as count
-      from saveds join tracks on saveds.track_id = tracks.track_id
-      join albums on albums.album_id = tracks.album_id
-      group by albums.album_id, albums.album_name
-      order by count
-      ) as t1, albums
-    where albums.release_date >= '2000-01-01' and albums.album_id = t1.album_id
-  limit 2;"
-
-  @top_n_albums_by_num_saved_overall=ActiveRecord::Base.connection.execute(top_n_albums_by_num_saved_overall_sql)
 
 
   end
