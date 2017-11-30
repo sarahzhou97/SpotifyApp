@@ -1,7 +1,7 @@
 class CreateTracks < ActiveRecord::Migration[5.0]
   def change
-    create_table :tracks do |t|
-    	t.string :track_id
+    create_table :tracks, id: false do |t|
+    	t.primary_key :track_id
     	t.string :album_id
     	t.string :song_name
     	t.integer :popularity
@@ -19,5 +19,7 @@ class CreateTracks < ActiveRecord::Migration[5.0]
   		t.integer :time_signature
   		t.float :valence
     end
+
+    change_column :tracks, :track_id, :string
   end
 end
