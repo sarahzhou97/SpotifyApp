@@ -4,6 +4,7 @@ require 'rspotify'
 class WelcomeController < ApplicationController
 
 
+
   def index
   	
   end
@@ -42,6 +43,7 @@ class WelcomeController < ApplicationController
   	end
 
     run_queries_user(rspotify_user.id)
+    render :user_data
 
   end
 
@@ -98,6 +100,16 @@ top_n_albums_by_num_saved_overall_sql = "select t1.album_name from
   limit 2;"
 
   @top_n_albums_by_num_saved_overall=ActiveRecord::Base.connection.execute(top_n_albums_by_num_saved_overall_sql)
+
+  top_n_genres_by_num_saved_overall_sql = 'select t1.genre from
+    (select albums.genre, count(*) as count
+    from tracks, albums
+    where albums.album_id = tracks.album_id and track_id in (select track_id from saveds)
+    group by albums.genre
+    order by count) as t1 
+limit 2;'
+
+@top_n_genres_by_num_saved_overall=ActiveRecord::Base.connection.execute(top_n_genres_by_num_saved_overall_sql)
 end
 
 
