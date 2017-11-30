@@ -17,7 +17,10 @@ class WelcomeController < ApplicationController
   end
 
   def user_data
-    # run_queries_user($spotify_user.user_id)
+    run_queries_user($spotify_user.user_id)
+  end
+
+  def user_info
   end
 
   def create_new_user
@@ -28,22 +31,21 @@ class WelcomeController < ApplicationController
   	$spotify_user = SpotifyUser.new(:user_id => rspotify_user.id,:name =>rspotify_user.display_name)
   	$spotify_user.save
 
-  	# @playlists = rspotify_user.playlists(limit: 5)
+  	@playlists = rspotify_user.playlists(limit: 2)
 
-  	# for playlist in @playlists do
-   #  		add_playlist(playlist,rspotify_user.id)
-  	# end
+  	for playlist in @playlists do
+    		add_playlist(playlist,rspotify_user.id)
+  	end
 
-   #  @tracks = rspotify_user.saved_tracks(limit: 50)
+    @tracks = rspotify_user.saved_tracks(limit: 10)
 
-   #  for track in @tracks do
-   #  	add_song(track)
-   #    saved = Saved.new(:user_id =>rspotify_user.id, :track_id => track.id)
-   #    saved.save
-  	# end
+    for track in @tracks do
+    	add_song(track)
+      saved = Saved.new(:user_id =>rspotify_user.id, :track_id => track.id)
+      saved.save
+  	end
 
-    # run_queries_user(rspotify_user.id)
-    render :user_data
+    render :user_info
 
   end
 
@@ -224,10 +226,16 @@ top_n_users_2_sql = 'select user_id from
     follows = FollowsPlaylist.new(:playlist_id => playlist.snapshot_id, :user_id => id)
     follows.save
     tracks = playlist.tracks
+    @x = 0
     for track in tracks do
-      add_song(track)
-      contains = PlaylistContain.new(:playlist_id => playlist.snapshot_id, :track_id => track.id)
-      contains.save
+      if @x<10
+        add_song(track)
+        contains = PlaylistContain.new(:playlist_id => playlist.snapshot_id, :track_id => track.id)
+        contains.save
+        @x+=1 
+      else
+        break
+      end
     end
   end
 

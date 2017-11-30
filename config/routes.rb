@@ -5,6 +5,7 @@ Rails.application.routes.draw do
 get '/auth/spotify/callback', to: 'welcome#create_new_user'
 get '/userdata', to: 'welcome#user_data'
 get '/databasedata', to: 'welcome#database_data'
+get '/userinfo', to: 'welcome#user_info'
 
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 end
