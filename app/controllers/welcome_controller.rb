@@ -17,7 +17,7 @@ class WelcomeController < ApplicationController
   end
 
   def user_data
-    run_queries_user($spotify_user.user_id)
+    # run_queries_user($spotify_user.user_id)
   end
 
   def create_new_user
@@ -34,15 +34,15 @@ class WelcomeController < ApplicationController
    #  		add_playlist(playlist,rspotify_user.id)
   	# end
 
-    @tracks = rspotify_user.saved_tracks(limit: 50)
+   #  @tracks = rspotify_user.saved_tracks(limit: 50)
 
-    for track in @tracks do
-    	add_song(track)
-      saved = Saved.new(:user_id =>rspotify_user.id, :track_id => track.id)
-      saved.save
-  	end
+   #  for track in @tracks do
+   #  	add_song(track)
+   #    saved = Saved.new(:user_id =>rspotify_user.id, :track_id => track.id)
+   #    saved.save
+  	# end
 
-    run_queries_user(rspotify_user.id)
+    # run_queries_user(rspotify_user.id)
     render :user_data
 
   end
