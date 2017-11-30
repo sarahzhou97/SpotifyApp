@@ -26,7 +26,12 @@ class WelcomeController < ApplicationController
 
 
   	$spotify_user = SpotifyUser.new(:user_id => rspotify_user.id,:name =>rspotify_user.display_name)
-  	$spotify_user.save
+  	begin
+      $spotify_user.save
+    rescue => e
+      puts e.message
+      puts "Ignoring..."
+    end
 
   	@playlists = rspotify_user.playlists(limit: 5)
 
@@ -39,7 +44,12 @@ class WelcomeController < ApplicationController
     for track in @tracks do
     	add_song(track)
       saved = Saved.new(:user_id =>rspotify_user.id, :track_id => track.id)
-      saved.save
+      begin
+        saved.save
+      rescue => e
+        puts e.message
+        puts "Ignoring..."
+      end
   	end
 
     run_queries_user(rspotify_user.id)
@@ -220,25 +230,50 @@ top_n_users_2_sql = 'select user_id from
 
   def add_playlist(playlist,id)
     play = Playlist.new(:playlist_id => playlist.snapshot_id,:creator_id => playlist.owner.id,:playlist_name => playlist.name)
-    play.save
+    begin
+      play.save
+    rescue => e
+      puts e.message
+      puts "Ignoring..."
+    end
     follows = FollowsPlaylist.new(:playlist_id => playlist.snapshot_id, :user_id => id)
-    follows.save
+    begin
+      follows.save
+    rescue => e
+      puts e.message
+      puts "Ignoring..."
+    end
     tracks = playlist.tracks
     for track in tracks do
       add_song(track)
       contains = PlaylistContain.new(:playlist_id => playlist.snapshot_id, :track_id => track.id)
-      contains.save
+      begin
+        contains.save
+      rescue => e
+        puts e.message
+        puts "Ignoring..."
+      end
     end
   end
 
   def add_album(album)
     alb = Album.new(:album_type =>album.album_type,:artist_id => album.artists[0].id, :album_id => album.id, :genre => album.genres[0], :album_name => album.name,:popularity => album.popularity, :release_date =>album.release_date)
-    alb.save
+    begin
+      alb.save
+    rescue => e
+      puts e.message
+      puts "Ignoring..."
+    end
   end
 
   def add_artist(artist)
     art = Artist.new(:name => artist.name, :artist_id => artist.id, :popularity => artist.popularity, :genre => artist.genres[0])
-    art.save
+    begin
+      art.save
+    rescue => e
+      puts e.message
+      puts "Ignoring..."
+    end
   end
 
   def add_song(track)
@@ -247,7 +282,12 @@ top_n_users_2_sql = 'select user_id from
       :acousticness => audio_features.acousticness,:danceability => audio_features.danceability,
       :energy => audio_features.energy,:instrumentalness => audio_features.instrumentalness,:key => audio_features.key,:liveness => audio_features.liveness,:loudness => audio_features.loudness,
       :mode => audio_features.mode,:speechiness => audio_features.speechiness,:tempo => audio_features.tempo,:time_signature => audio_features.time_signature,:valence => audio_features.valence)
-    t.save
+    begin
+      t.save
+    rescue => e
+      puts e.message
+      puts "Ignoring..."
+    end
     add_album(track.album)
     add_artist(track.artists[0])
   end
