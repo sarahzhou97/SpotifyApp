@@ -15,8 +15,7 @@ ActiveRecord::Schema.define(version: 20171109001054) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
-  create_table "albums", force: :cascade do |t|
-    t.string  "album_id"
+  create_table "albums", primary_key: "album_id", force: :cascade do |t|
     t.string  "album_type"
     t.string  "artist_id"
     t.string  "genre"
@@ -25,43 +24,39 @@ ActiveRecord::Schema.define(version: 20171109001054) do
     t.integer "popularity"
   end
 
-  create_table "artists", force: :cascade do |t|
-    t.string  "artist_id"
+  create_table "artists", primary_key: "artist_id", force: :cascade do |t|
     t.string  "name"
     t.integer "popularity"
     t.string  "genre"
   end
 
-  create_table "follows_playlists", force: :cascade do |t|
-    t.string "user_id"
-    t.string "playlist_id"
+  create_table "follows_playlists", primary_key: ["user_id", "playlist_id"], force: :cascade do |t|
+    t.string "user_id",     null: false
+    t.string "playlist_id", null: false
   end
 
-  create_table "playlist_contains", force: :cascade do |t|
-    t.string "playlist_id"
-    t.string "track_id"
+  create_table "playlist_contains", primary_key: ["playlist_id", "track_id"], force: :cascade do |t|
+    t.string "playlist_id", null: false
+    t.string "track_id",    null: false
   end
 
-  create_table "playlists", force: :cascade do |t|
-    t.string "playlist_id"
+  create_table "playlists", primary_key: "playlist_id", force: :cascade do |t|
     t.string "creator_id"
     t.string "playlist_name"
   end
 
-  create_table "saveds", force: :cascade do |t|
-    t.string "user_id"
-    t.string "track_id"
+  create_table "saveds", primary_key: ["user_id", "track_id"], force: :cascade do |t|
+    t.string "user_id",  null: false
+    t.string "track_id", null: false
   end
 
-  create_table "spotify_users", force: :cascade do |t|
-    t.string "user_id"
+  create_table "spotify_users", primary_key: "user_id", force: :cascade do |t|
     t.string "birthdate"
     t.string "country"
     t.string "name"
   end
 
-  create_table "tracks", force: :cascade do |t|
-    t.string  "track_id"
+  create_table "tracks", primary_key: "track_id", force: :cascade do |t|
     t.string  "album_id"
     t.string  "song_name"
     t.integer "popularity"
