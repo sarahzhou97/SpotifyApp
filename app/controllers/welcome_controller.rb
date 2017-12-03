@@ -35,7 +35,7 @@ class WelcomeController < ApplicationController
     end
 
 
-    @playlists = rspotify_user.playlists(limit: 4)
+    @playlists = rspotify_user.playlists(limit: 7)
 
     	for playlist in @playlists do
       		add_playlist(playlist,rspotify_user.id)
