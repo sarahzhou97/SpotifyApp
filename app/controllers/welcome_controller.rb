@@ -41,7 +41,7 @@ class WelcomeController < ApplicationController
       		add_playlist(playlist,rspotify_user.id)
     	end
 
-      @tracks = rspotify_user.saved_tracks(limit: 10)
+    @tracks = rspotify_user.saved_tracks(limit: 10)
 
     for track in @tracks do
     	add_song(track)
@@ -248,19 +248,20 @@ top_n_users_2_sql = 'select user_id from
 
     tracks = playlist.tracks
     @x = 0
-    
+
     for track in tracks do
       if @x<10
         add_song(track)
         contains = PlaylistContain.new(:playlist_id => playlist.snapshot_id, :track_id => track.id)
         begin
           contains.save
+          @x+=1 
         rescue => e
           puts e.message
           puts "Ignoring..."
-          @x+=1 
       else
         break
+      end
       end
     end
   end
