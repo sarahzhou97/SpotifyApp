@@ -28,10 +28,11 @@ class WelcomeController < ApplicationController
   	rspotify_user = RSpotify::User.new(request.env['omniauth.auth'])
 
     if SpotifyUser.exists?(rspotify_user.id)
-    	$spotify_user = SpotifyUser.new(:user_id => rspotify_user.id,:name =>rspotify_user.display_name)
-    	$spotify_user.save
-    else
       $spotify_user = SpotifyUser.find(rspotify_user.id)
+    	
+    else
+      $spotify_user = SpotifyUser.new(:user_id => rspotify_user.id,:name =>rspotify_user.display_name)
+      $spotify_user.save
     end
 
 
