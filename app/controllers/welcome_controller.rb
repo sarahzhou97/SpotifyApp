@@ -41,7 +41,7 @@ class WelcomeController < ApplicationController
       		add_playlist(playlist,rspotify_user.id)
     	end
 
-    @tracks = rspotify_user.saved_tracks(limit: 15)
+    @tracks = rspotify_user.saved_tracks(limit: 20)
 
     for track in @tracks do
     	add_song(track)
