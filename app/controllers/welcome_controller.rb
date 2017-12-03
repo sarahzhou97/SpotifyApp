@@ -27,23 +27,26 @@ class WelcomeController < ApplicationController
   
   	rspotify_user = RSpotify::User.new(request.env['omniauth.auth'])
 
+    if SpotifyUser.exists?(rspotify_user.id)
+    	$spotify_user = SpotifyUser.new(:user_id => rspotify_user.id,:name =>rspotify_user.display_name)
+    	$spotify_user.save
 
-  	$spotify_user = SpotifyUser.new(:user_id => rspotify_user.id,:name =>rspotify_user.display_name)
-  	$spotify_user.save
+    	@playlists = rspotify_user.playlists(limit: 2)
 
-  	@playlists = rspotify_user.playlists(limit: 2)
+    	for playlist in @playlists do
+      		add_playlist(playlist,rspotify_user.id)
+    	end
 
-  	for playlist in @playlists do
-    		add_playlist(playlist,rspotify_user.id)
-  	end
+      @tracks = rspotify_user.saved_tracks(limit: 10)
 
-    @tracks = rspotify_user.saved_tracks(limit: 10)
-
-    for track in @tracks do
-    	add_song(track)
-      saved = Saved.new(:user_id =>rspotify_user.id, :track_id => track.id)
-      saved.save
-  	end
+      for track in @tracks do
+      	add_song(track)
+        saved = Saved.new(:user_id =>rspotify_user.id, :track_id => track.id)
+        saved.save
+    	end
+    else
+      $spotify_user = SpotifyUser.find(rspotify_user.id)
+    end
 
     render :user_info
 
