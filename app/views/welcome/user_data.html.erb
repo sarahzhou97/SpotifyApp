@@ -87,17 +87,19 @@
       <% end %>
     </div>
 
-    <div class="col-sm-4">
-      <h3>Top Genres</h3>
-        <% @top_n_genres.each do |genre| %>
-            <p><%=genre%></p>
-        <% end %>
-    </div>
+
+    <!-- <div class="col-sm-4">
+      <h3>Top Genres</h3> -->
+        <%#= @top_n_genres.each do |genre| %>
+            <!-- <p><%=genre%></p> -->
+        <%#= end %>
+  <!--   </div> -->
+
     
   </div>
 </div>
 
-<%= link_to "Back to Preferences", { action: "user_preferences" }, class: "btn"%>
+
 
 
 <h2>Top n Spotify users in databased ordered by number of common songs saved with current user</h2>

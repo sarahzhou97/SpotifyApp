@@ -34,6 +34,8 @@
 <% end %>
       </ul>
     </div>
+
+
     <div class="col-sm-4">
       <h3>Top Artists</h3>
       <ul>
@@ -55,18 +57,17 @@
       <% @top_n_playlists_overall.each do |artist| %>
   <p><%=artist%></p>
 <% end %>
-    </div>
+ <!--    </div>
  <div class="col-sm-4">
       <h3>Top Genres</h3>
-      <% @top_n_genres_by_num_saved_overall.each do |artist| %>
-  <p><%=artist%></p>
-<% end %>
-    </div>
+      <%#= @top_n_genres_by_num_saved_overall.each do |artist| %>
+  <p><%#=artist%></p>
+<%#= end %>
+    </div> -->
 
   </div>
 </div>
 
-<%= link_to "Back to Preferences", { action: "database_preferences" }, class: "btn"%>
 
 <h2>Top n songs ordered by number of users that have saved it</h2>
 <% @top_n_tracks_overall.each do |user| %>
