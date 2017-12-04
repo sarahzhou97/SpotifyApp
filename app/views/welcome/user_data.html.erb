@@ -97,6 +97,8 @@
   </div>
 </div>
 
+<%= link_to "Back to Preferences", { action: "user_preferences" }, class: "btn"%>
+
 
 <h2>Top n Spotify users in databased ordered by number of common songs saved with current user</h2>
 <% @top_n_users.each do |user| %>
@@ -132,3 +134,6 @@
 <% @top_n_users_2.each do |user| %>
   <p><%=user%></p>
 <% end %>
+
+
+

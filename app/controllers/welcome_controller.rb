@@ -13,11 +13,35 @@ class WelcomeController < ApplicationController
   end
 
   def database_data
-    run_queries_global($spotify_user.user_id)
+     @num = params[:num]
+    @popularity = params[:popularity]
+    @acousticness= params[:acousticness]
+    @danceability= params[:danceability]
+    @instrumentalness= params[:instrumentalness]
+    @energy= params[:energy]
+    @liveness= params[:liveness]
+    @loudness= params[:loudness]
+    @speechiness= params[:speechiness]
+    @tempo= params[:tempo]
+    @time_signature= params[:time_signature]
+    @valence= params[:valence]
+    #run_queries_global($spotify_user.user_id)
   end
 
   def user_data
-    run_queries_user($spotify_user.user_id)
+    @num = params[:num]
+    @popularity = params[:popularity]
+    @acousticness= params[:acousticness]
+    @danceability= params[:danceability]
+    @instrumentalness= params[:instrumentalness]
+    @energy= params[:energy]
+    @liveness= params[:liveness]
+    @loudness= params[:loudness]
+    @speechiness= params[:speechiness]
+    @tempo= params[:tempo]
+    @time_signature= params[:time_signature]
+    @valence= params[:valence]
+    #run_queries_user($spotify_user.user_id)
   end
 
   def user_info
@@ -26,7 +50,7 @@ class WelcomeController < ApplicationController
   def user_preferences
   end
 
-  def global_preferences
+  def database_preferences
   end
 
   def create_new_user

@@ -4,7 +4,7 @@
 </head>
 <body>
 
-<%= bootstrap_form_tag url: '/globaldata' do |f| %>
+<%= bootstrap_form_tag url: '/databasedata' do |f| %>
   <%= f.form_group :num, label: { text: "Number of Query Results" } do %>
     <%= f.radio_button :num, 1, label: "1"%>
     <%= f.radio_button :num, 3, label: "3", checked: true  %>

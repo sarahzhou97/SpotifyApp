@@ -10,7 +10,7 @@ get '/databasedata', to: 'welcome#database_data'
 get '/userinfo', to: 'welcome#user_info'
 get '/preferences', to: 'welcome#preferences'
 get '/userpreferences', to: 'welcome#user_preferences'
-get '/globalpreferences', to: 'welcome#global_preferences'
+get '/databasepreferences', to: 'welcome#database_preferences'
 
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 end
