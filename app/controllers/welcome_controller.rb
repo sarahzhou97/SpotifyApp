@@ -151,15 +151,15 @@ top_n_albums_by_num_saved_overall_sql = "select t1.album_name from
 
   @top_n_albums_by_num_saved_overall=ActiveRecord::Base.connection.execute(top_n_albums_by_num_saved_overall_sql)
 
-#   top_n_genres_by_num_saved_overall_sql = 'select t1.genre from
-#     (select albums.genre, count(*) as count
-#     from tracks, albums
-#     where albums.album_id = tracks.album_id and track_id in (select track_id from saveds)
-#     group by albums.genre
-#     order by count) as t1 
-# limit 2;'
+  top_n_genres_by_num_saved_overall_sql = 'select t1.genre from
+    (select albums.genre, count(*) as count
+    from tracks, albums
+    where albums.album_id = tracks.album_id and track_id in (select track_id from saveds)
+    group by albums.genre
+    order by count) as t1 
+limit 2;'
 
-# @top_n_genres_by_num_saved_overall=ActiveRecord::Base.connection.execute(top_n_genres_by_num_saved_overall_sql)
+@top_n_genres_by_num_saved_overall=ActiveRecord::Base.connection.execute(top_n_genres_by_num_saved_overall_sql)
 end
 
 
@@ -178,13 +178,13 @@ end
 
     @top_n_users = ActiveRecord::Base.connection.execute(top_n_users_sql)
 
-    # genre_songs_hist_sql = 'select genre, round(100.0 * count(*)/(select count(*) from saveds where saveds.user_id = '+id+ '::varchar),1) as percentage
-    # from (select * from saveds where saveds.user_id = ' +id+ '::varchar) s 
-    # join tracks on s.track_id = tracks.track_id
-    # join albums on tracks.album_id=albums.album_id 
-    # group by genre;'
+    genre_songs_hist_sql = 'select genre, round(100.0 * count(*)/(select count(*) from saveds where saveds.user_id = '+id+ '::varchar),1) as percentage
+    from (select * from saveds where saveds.user_id = ' +id+ '::varchar) s 
+    join tracks on s.track_id = tracks.track_id
+    join albums on tracks.album_id=albums.album_id 
+    group by genre;'
 
-    # @genre_songs_hist = ActiveRecord::Base.connection.execute(genre_songs_hist_sql)
+    @genre_songs_hist = ActiveRecord::Base.connection.execute(genre_songs_hist_sql)
 
     top_n_albums_sql = 'select t1.album_id, t1.album_name, count(*) from
     (select albums.album_id,albums.album_name,s.track_id from 
