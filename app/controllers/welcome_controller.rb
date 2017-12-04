@@ -23,6 +23,12 @@ class WelcomeController < ApplicationController
   def user_info
   end
 
+  def user_preferences
+  end
+
+  def global_preferences
+  end
+
   def create_new_user
   
   	rspotify_user = RSpotify::User.new(request.env['omniauth.auth'])
