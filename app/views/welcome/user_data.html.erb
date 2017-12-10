@@ -85,7 +85,7 @@
   <div class="col-sm-4">
       <h3>Top Songs</h3>
       <% @top_n_songs_recs.each do |song| %>
-        <p><%=song['track_name']%> - <%=$rec%>: <%=song[$rec]%></p>
+        <p>&ldquo;<%=song['song_name']%>&rdquo; by <%=song['name']%></p>
       <% end %>
     </div>
 

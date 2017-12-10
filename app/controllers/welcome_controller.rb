@@ -65,9 +65,7 @@ class WelcomeController < ApplicationController
       saved = Saved.new(:user_id =>rspotify_user.id, :track_id => track.id)
       begin
         saved.save
-      rescue => e
-        puts e.message
-        puts "Ignoring..."
+      rescue 
       end
     end
     
@@ -181,12 +179,12 @@ check_repeats_sql = 'select track_id, count(*) from tracks group by track_id hav
 
   @top_n_artists = ActiveRecord::Base.connection.execute(top_n_artists_sql)
 
-  top_n_songs_recs_sql = 'select tracks.song_name, artists.name
+ top_n_songs_recs_sql = 'select tracks.song_name, artists.name
   from tracks, saveds, playlists, playlist_contains, artists,
     (select avg(tracks.'+$rec+') as attri
-      from tracks, saveds, playlists, playlist_contains
-      where (tracks.track_id=saveds.track_id and saveds.user_id='+id+'::varchar) or (tracks.track_id=playlist_contains.track_id  and playlists.creator_id='+id+'::varchar) and playlists.playlist_id=playlist_contains.playlist_id)) as t1
-  where ((tracks.track_id=saveds.track_id and saveds.user_id<>'+id+'::varchar) or (tracks.track_id=playlist_contains.track_id  and playlists.creator_id<>'+id+'::varchar) and playlists.playlist_id=playlist_contains.playlist_id)) and (tracks.artist_id=artists.artist_id)
+     from tracks, saveds, playlists, playlist_contains
+     where (tracks.track_id=saveds.track_id and saveds.user_id='+id+'::varchar) or (tracks.track_id=playlist_contains.track_id  and playlists.creator_id='+id+'::varchar and playlists.playlist_id=playlist_contains.playlist_id)) as t1
+  where ((tracks.track_id=saveds.track_id and saveds.user_id<>'+id+'::varchar) or (tracks.track_id=playlist_contains.track_id  and playlists.creator_id<>'+id+'::varchar and playlists.playlist_id=playlist_contains.playlist_id)) and (tracks.artist_id=artists.artist_id)
     group by tracks.song_name, artists.name, tracks.'+$rec+', t1.attri
     order by abs(t1.attri-tracks.'+$rec+') ASC
     limit ' +$num+ '::bigint;'
