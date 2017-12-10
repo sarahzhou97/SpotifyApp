@@ -34,7 +34,7 @@ class WelcomeController < ApplicationController
 
   def preferences_submitted
      $num = params[:num]
-    $rec = params[:num]
+    $rec = params[:rec]
 
   end
 
@@ -190,6 +190,8 @@ check_repeats_sql = 'select track_id, count(*) from tracks group by track_id hav
     group by tracks.song_name, artists.name, tracks.'+$rec+', t1.attri
     order by abs(t1.attri-tracks.'+$rec+') ASC
     limit ' +$num+ '::bigint;'
+
+    puts top_n_songs_recs_sql
 
   @top_n_songs_recs = ActiveRecord::Base.connection.execute(top_n_songs_recs_sql)
 
