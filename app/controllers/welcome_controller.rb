@@ -71,16 +71,14 @@ class WelcomeController < ApplicationController
     else
       $spotify_user = SpotifyUser.new(:user_id => rspotify_user.id,:name =>rspotify_user.display_name)
       $spotify_user.save
-    end
 
-
-    @playlists = rspotify_user.playlists(limit: 7)
+       @playlists = rspotify_user.playlists(limit: 5)
 
       for playlist in @playlists do
           add_playlist(playlist,rspotify_user.id)
       end
 
-    @tracks = rspotify_user.saved_tracks(limit: 20)
+    @tracks = rspotify_user.saved_tracks(limit: 18)
 
     for track in @tracks do
       add_song(track)
@@ -92,6 +90,11 @@ class WelcomeController < ApplicationController
         puts "Ignoring..."
       end
     end
+    
+    end
+
+
+   
 
     render :user_info
 
@@ -171,14 +174,15 @@ check_repeats_sql = 'select track_id, count(*) from tracks group by track_id hav
  check_repeats_users_sql = 'select user_id, count(*) from spotify_users group by user_id having count(*)>1;'
  
  @check_repeats_users = ActiveRecord::Base.connection.execute(check_repeats_users_sql)
-
-    top_n_users_sql = 'select t1.user_id from 
-    (select user_id, count(*) 
-    from saveds 
+    top_n_users_sql = 'select t2.user_id, name from (select t1.user_id from 
+    (select saveds.user_id, name, count(*) 
+    from saveds, spotify_users 
     where saveds.user_id<> ' +id+ '::varchar and saveds.track_id in 
-      (select track_id from saveds where user_id = '+id+ '::varchar)
-    group by user_id
-    order by count desc) t1
+      (select track_id from saveds where user_id = '+id+ '::varchar) and
+      spotify_users.user_id = saveds.user_id
+    group by saveds.user_id, name
+    order by count desc) t1) as t2, spotify_users
+    where spotify_users.user_id = t2.user_id
   limit ' +$num+ '::bigint;'
 
     @top_n_users = ActiveRecord::Base.connection.execute(top_n_users_sql)
@@ -202,7 +206,7 @@ check_repeats_sql = 'select track_id, count(*) from tracks group by track_id hav
 
   @top_n_albums = ActiveRecord::Base.connection.execute(top_n_albums_sql)
 
-  top_n_artists_sql = 'select artists.artist_id,name, count(*) from
+  top_n_artists_sql = 'select artists.artist_id, name, count(*) from
     (select * from saveds where saveds.user_id = '+id+ '::varchar) s, tracks, artists
     where artists.artist_id = tracks.artist_id and tracks.track_id=s.track_id
     group by artists.artist_id,artists.name
@@ -228,12 +232,13 @@ check_repeats_sql = 'select track_id, count(*) from tracks group by track_id hav
 
   @top_n_songs_recs = ActiveRecord::Base.connection.execute(top_n_songs_recs_sql)
 
-  top_n_playlists_sql = 'select t1.playlist_id from
+  top_n_playlists_sql = 'select playlists.playlist_name, t3.playlist_id from playlists, (select t1.playlist_id from
     (select t2.playlist_id, abs((t2.tempo) - (select avg(tracks.tempo) from tracks, saveds where saveds.user_id = '+id+ '::varchar and tracks.track_id = saveds.track_id)) as tempo_diff from
       (select playlists.playlist_id, avg(tempo) as tempo from playlist_contains, tracks, playlists
         where playlist_contains.track_id = tracks.track_id and playlists.playlist_id=playlist_contains.playlist_id and playlists.creator_id <> '+ id+ '::varchar
         group by playlists.playlist_id) t2
-    order by tempo_diff asc) as t1 
+    order by tempo_diff asc) as t1) as t3
+    where playlists.playlist_id = t3.playlist_id
   limit ' +$num+ '::bigint;'
 
   @top_n_playlists = ActiveRecord::Base.connection.execute(top_n_playlists_sql)
@@ -248,24 +253,27 @@ limit ' +$num+ '::bigint;'
 
 @top_n_genres = ActiveRecord::Base.connection.execute(top_n_genres_sql)
 
-top_n_users_1_sql = 'select creator_id from
+top_n_users_1_sql = 'select t1.creator_id, spotify_users.name from
+(select creator_id from
     (select creator_id, count(*)
       from playlists
       where playlists.playlist_id in
         (select follows_playlists.playlist_id from follows_playlists where '+id+ '::varchar = follows_playlists.user_id)
       group by creator_id
-      order by count desc) as foo
+      order by count desc) as foo) as t1, spotify_users
+      where t1.creator_id = spotify_users.name
   limit ' +$num+ '::bigint;'
 
   @top_n_users_1 = ActiveRecord::Base.connection.execute(top_n_users_1_sql)
 
-top_n_users_2_sql = 'select user_id from
+top_n_users_2_sql = 'select t1.user_id, name from (select user_id from
     (select user_id, count(*)
       from follows_playlists
       where follows_playlists.user_id <> '+id+ '::varchar and follows_playlists.playlist_id in
         (select playlists.playlist_id from playlists where '+id+ '::varchar = playlists.creator_id)
       group by user_id
-      order by count desc) as foo
+      order by count desc) as foo) as t1, spotify_users
+      where spotify_users.user_id = t1.user_id
   limit ' +$num+ '::bigint;'
 
   @top_n_users_2 = ActiveRecord::Base.connection.execute(top_n_users_2_sql)
@@ -277,32 +285,29 @@ top_n_users_2_sql = 'select user_id from
     play = Playlist.new(:playlist_id => playlist.snapshot_id,:creator_id => playlist.owner.id,:playlist_name => playlist.name)
     begin
       play.save
-    rescue => e
-      puts e.message
-      puts "Ignoring..."
+    rescue 
+      
     end
 
     follows = FollowsPlaylist.new(:playlist_id => playlist.snapshot_id, :user_id => id)
     begin
       follows.save
-    rescue => e
-      puts e.message
-      puts "Ignoring..."
+    rescue 
+      
     end
 
     tracks = playlist.tracks
     @x = 0
 
     for track in tracks do
-      if @x<12
+      if @x<10
         add_song(track)
         contains = PlaylistContain.new(:playlist_id => playlist.snapshot_id, :track_id => track.id)
         begin
           contains.save
           @x+=1 
-        rescue => e
-          puts e.message
-          puts "Ignoring..."
+        rescue 
+          
       else
         break
       end
@@ -314,9 +319,8 @@ top_n_users_2_sql = 'select user_id from
     alb = Album.new(:album_type =>album.album_type,:artist_id => album.artists[0].id, :album_id => album.id, :genre => album.genres[0], :album_name => album.name,:popularity => album.popularity, :release_date =>album.release_date)
     begin
       alb.save
-    rescue => e
-      puts e.message
-      puts "Ignoring..."
+    rescue 
+      
     end
   end
 
@@ -324,9 +328,8 @@ top_n_users_2_sql = 'select user_id from
     art = Artist.new(:name => artist.name, :artist_id => artist.id, :popularity => artist.popularity, :genre => artist.genres[0])
     begin
       art.save
-    rescue => e
-      puts e.message
-      puts "Ignoring..."
+    rescue 
+      
     end
   end
 
@@ -338,9 +341,8 @@ top_n_users_2_sql = 'select user_id from
       :mode => audio_features.mode,:speechiness => audio_features.speechiness,:tempo => audio_features.tempo,:time_signature => audio_features.time_signature,:valence => audio_features.valence)
     begin
       t.save
-    rescue => e
-      puts e.message
-      puts "Ignoring..."
+    rescue 
+     
     end
     add_album(track.album)
     add_artist(track.artists[0])
