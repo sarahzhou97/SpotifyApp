@@ -60,7 +60,7 @@
       <h3>Top Albums</h3>
       <ul>
         <% @top_n_albums.each do |album| %>
-          <p><%=album%></p>
+          <p><%=album['album_name']%></p>
         <% end %>
       </ul>
     </div>
@@ -68,7 +68,7 @@
       <h3>Top Artists</h3>
       <ul>
         <% @top_n_artists.each do |artist| %>
-          <p><%=artist%></p>
+          <p><%=artist['name']%></p>
         <% end %>
       </ul>
     </div>
@@ -88,12 +88,7 @@
     </div>
 
 
-    <div class="col-sm-4">
-      <h3>Top Genres</h3>
-        <% @top_n_genres.each do |genre| %>
-            <p><%=genre%></p>
-        <% end %>
-    </div>
+
 
     
   </div>

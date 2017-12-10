@@ -164,7 +164,13 @@ end
 
   def run_queries_user(id)
 
-
+check_repeats_sql = 'select track_id, count(*) from tracks group by track_id having count(*)>1;'
+ 
+ @check_repeats = ActiveRecord::Base.connection.execute(check_repeats_sql)
+ 
+ check_repeats_users_sql = 'select user_id, count(*) from spotify_users group by user_id having count(*)>1;'
+ 
+ @check_repeats_users = ActiveRecord::Base.connection.execute(check_repeats_users_sql)
 
     top_n_users_sql = 'select t1.user_id from 
     (select user_id, count(*) 
