@@ -6,17 +6,7 @@ class WelcomeController < ApplicationController
   $spotify_user
 
      $num = '3'
-    $popularity = 1
-    $acousticness= 1
-    $danceability= 1
-    $instrumentalness= 1
-    $energy= 1
-    $liveness= 1
-    $loudness= 1
-    $speechiness= 1
-    $tempo= 1
-    $time_signature= 1
-    $valence= 1
+    $rec = 'Acousticness'
 
   def index
     
@@ -44,17 +34,7 @@ class WelcomeController < ApplicationController
 
   def preferences_submitted
      $num = params[:num]
-    $popularity = params[:popularity]
-    $acousticness= params[:acousticness]
-    $danceability= params[:danceability]
-    $instrumentalness= params[:instrumentalness]
-    $energy= params[:energy]
-    $liveness= params[:liveness]
-    $loudness= params[:loudness]
-    $speechiness= params[:speechiness]
-    $tempo= params[:tempo]
-    $time_signature= params[:time_signature]
-    $valence= params[:valence]
+    $rec = params[:num]
 
   end
 
@@ -153,19 +133,13 @@ top_n_albums_by_num_saved_overall_sql = 'select t1.album_name from
 
   @top_n_albums_by_num_saved_overall=ActiveRecord::Base.connection.execute(top_n_albums_by_num_saved_overall_sql)
 
-  top_n_genres_by_num_saved_overall_sql = 'select t1.genre from
-    (select albums.genre, count(*) as count
-    from tracks, albums
-    where albums.album_id = tracks.album_id and track_id in (select track_id from saveds)
-    group by albums.genre
-    order by count desc) as t1 
-limit ' +$num+ '::bigint;'
 
-@top_n_genres_by_num_saved_overall=ActiveRecord::Base.connection.execute(top_n_genres_by_num_saved_overall_sql)
 end
 
 
   def run_queries_user(id)
+
+
 
 check_repeats_sql = 'select track_id, count(*) from tracks group by track_id having count(*)>1;'
  
@@ -187,14 +161,6 @@ check_repeats_sql = 'select track_id, count(*) from tracks group by track_id hav
 
     @top_n_users = ActiveRecord::Base.connection.execute(top_n_users_sql)
 
-    genre_songs_hist_sql = 'select genre, round(100.0 * count(*)/(select count(*) from saveds where saveds.user_id = '+id+ '::varchar),1) as percentage
-    from (select * from saveds where saveds.user_id = ' +id+ '::varchar) s 
-    join tracks on s.track_id = tracks.track_id
-    join albums on tracks.album_id=albums.album_id 
-    group by genre;'
-
-    @genre_songs_hist = ActiveRecord::Base.connection.execute(genre_songs_hist_sql)
-
     top_n_albums_sql = 'select t1.album_id, t1.album_name, count(*) from
     (select albums.album_id,albums.album_name,s.track_id from 
       (select * from saveds where saveds.user_id = ' +id+ '::varchar) s, tracks, albums
@@ -215,43 +181,19 @@ check_repeats_sql = 'select track_id, count(*) from tracks group by track_id hav
 
   @top_n_artists = ActiveRecord::Base.connection.execute(top_n_artists_sql)
 
-  top_n_songs_recs_sql = 'select t2.song_name from
-    (select t3.track_id, t3.song_name, abs(t3.tempo - (select avg(tracks.tempo) from tracks, saveds where saveds.user_id = '+id+ '::varchar and tracks.track_id = saveds.track_id)) as tempo_diff from
-      (select tracks.track_id, tracks.song_name, tracks.tempo as tempo
-        from tracks, albums
-        where tracks.album_id = albums.album_id and albums.genre in 
-        (select t1.genre from
-        (select genre, count(*) as count
-        from tracks, albums
-        where albums.album_id = tracks.album_id and track_id in (select track_id from saveds where saveds.user_id = '+id+ '::varchar)
-        group by genre
-        order by count desc) as t1 
-        limit 2)) as t3
-    order by tempo_diff asc) as t2
-  limit ' +$num+ '::bigint;'
+  top_n_songs_recs_sql = 'select tracks.song_name, artists.name
+  from tracks, saveds, playlists, playlist_contains, artists,
+    (select avg(tracks.'+$rec+') as attri
+      from tracks, saveds, playlists, playlist_contains
+      where (tracks.track_id=saveds.track_id and saveds.user_id='+id+'::varchar) or (tracks.track_id=playlist_contains.track_id  and playlists.creator_id='+id+'::varchar) and playlists.playlist_id=playlist_contains.playlist_id)) as t1
+  where ((tracks.track_id=saveds.track_id and saveds.user_id<>'+id+'::varchar) or (tracks.track_id=playlist_contains.track_id  and playlists.creator_id<>'+id+'::varchar) and playlists.playlist_id=playlist_contains.playlist_id)) and (tracks.artist_id=artists.artist_id)
+    group by tracks.song_name, artists.name, tracks.'+$rec+', t1.attri
+    order by abs(t1.attri-tracks.'+$rec+') ASC
+    limit ' +$num+ '::bigint;'
 
   @top_n_songs_recs = ActiveRecord::Base.connection.execute(top_n_songs_recs_sql)
 
-  top_n_playlists_sql = 'select playlists.playlist_name, t3.playlist_id from playlists, (select t1.playlist_id from
-    (select t2.playlist_id, abs((t2.tempo) - (select avg(tracks.tempo) from tracks, saveds where saveds.user_id = '+id+ '::varchar and tracks.track_id = saveds.track_id)) as tempo_diff from
-      (select playlists.playlist_id, avg(tempo) as tempo from playlist_contains, tracks, playlists
-        where playlist_contains.track_id = tracks.track_id and playlists.playlist_id=playlist_contains.playlist_id and playlists.creator_id <> '+ id+ '::varchar
-        group by playlists.playlist_id) t2
-    order by tempo_diff asc) as t1) as t3
-    where playlists.playlist_id = t3.playlist_id
-  limit ' +$num+ '::bigint;'
 
-  @top_n_playlists = ActiveRecord::Base.connection.execute(top_n_playlists_sql)
-
-  top_n_genres_sql = 'select t1.genre from
-    (select albums.genre, count(*) as count
-    from tracks, albums
-    where albums.album_id = tracks.album_id and track_id in (select track_id from saveds where saveds.user_id = '+id+ '::varchar)
-    group by albums.genre
-    order by count desc) as t1 
-limit ' +$num+ '::bigint;'
-
-@top_n_genres = ActiveRecord::Base.connection.execute(top_n_genres_sql)
 
 top_n_users_1_sql = 'select t1.creator_id, spotify_users.name from
 (select creator_id from

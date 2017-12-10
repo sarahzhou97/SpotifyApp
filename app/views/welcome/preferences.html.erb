@@ -11,21 +11,23 @@
     <%= f.radio_button :num, 5, label: "5" %>
     <% end %>
   </div>
-  <div class="row">
-    <h2><%= f.form_group :attr, label: { text: "Song Attributes" } do %></h2>
-    <%= f.check_box :popularity, checked: true %>
-    <%= f.check_box :acousticness, checked: true %>
-    <%= f.check_box :danceability, checked: true %>
-    <%= f.check_box :instrumentalness,  checked: true %>
-    <%= f.check_box :energy, checked: true %>
-    <%= f.check_box :liveness, checked: true %>
-    <%= f.check_box :loudness, checked: true %>
-    <%= f.check_box :speechiness,  checked: true %>
-    <%= f.check_box :tempo, checked: true %>
-    <%= f.check_box :time_signature, checked: true %>
-    <%= f.check_box :valence, checked: true %>
+
+
+    <div class="row">
+    <h2><%= f.form_group :rec, label: { text: "Recommend Me Songs Based on the Following Attribute:" } do %></h2>
+      <%= f.radio_button :popularity, "Acousticness", label: "Acousticness", checked: true, inline:true %>
+      <%= f.radio_button :popularity, "Danceability", label: "Danceability", inline:true %>
+      <%= f.radio_button :popularity, "Instrumentalness", label: "Instrumentalness", inline:true %>
+      <%= f.radio_button :popularity, "Energy", label: "Energy", inline:true %>
+      <%= f.radio_button :popularity, "Liveness", label: "Liveness", inline:true %>
+      <%= f.radio_button :popularity, "Loudness", label: "Loudness", inline:true %>
+      <%= f.radio_button :popularity, "Speechiness", label: "Speechiness", inline:true %>
+      <%= f.radio_button :popularity, "Tempo", label: "Tempo", inline:true %>
+      <%= f.radio_button :popularity, "Valence", label: "Valence", inline:true %>
+
     <% end %>
   </div>
+
   <div class="row">
     <%= f.submit %>
     <% end %>
