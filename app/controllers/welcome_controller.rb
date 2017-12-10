@@ -72,18 +72,11 @@ class WelcomeController < ApplicationController
       $spotify_user = SpotifyUser.new(:user_id => rspotify_user.id,:name =>rspotify_user.display_name)
       $spotify_user.save
 
-<<<<<<< HEAD
        @playlists = rspotify_user.playlists(limit: 7)
 
       for playlist in @playlists do
           add_playlist(playlist,rspotify_user.id)
       end
-=======
-    @playlists = rspotify_user.playlists(limit: 7)
-    	for playlist in @playlists do
-      		add_playlist(playlist,rspotify_user.id)
-    	end
->>>>>>> 5f986c4fcba6f74351dbdb3cdd7b8d7a1d1a7c7e
 
     @tracks = rspotify_user.saved_tracks(limit: 20)
 
@@ -108,9 +101,6 @@ class WelcomeController < ApplicationController
 
   def run_queries_global(id)
 
-check_repeats_sql = 'select track_id,user_id, count(*) from saveds group by track_id,user_id having count(*)>1;'
-
-@check_repeats = ActiveRecord::Base.connection.execute(check_repeats_sql)
 
 
 top_n_tracks_overall_sql = 'select t1.track_id, t1.song_name from
@@ -179,6 +169,14 @@ end
 
 
   def run_queries_user(id)
+
+    check_repeats_sql = 'select track_id, count(*) from tracks group by track_id having count(*)>1;'
+
+@check_repeats = ActiveRecord::Base.connection.execute(check_repeats_sql)
+
+check_repeats_users_sql = 'select user_id, count(*) from users group by user_id having count(*)>1;'
+
+@check_repeats_users = ActiveRecord::Base.connection.execute(check_repeats_users_sql)
 
 
 

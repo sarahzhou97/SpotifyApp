@@ -99,9 +99,15 @@
   </div>
 </div>
 
-<h1>Checking Repeats in Saved Database</h1>
+<h1>Checking Repeats in Tracks</h1>
 
 <% @check_repeats.each do |repeats| %>
+  <p><%=repeats%></p>
+<% end %>
+
+<h1>Checking Repeats in Users</h1>
+
+<% @check_repeats_users.each do |repeats| %>
   <p><%=repeats%></p>
 <% end %>
 
