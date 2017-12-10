@@ -30,7 +30,7 @@
       <h3>Top Albums</h3>
       <ul>
         <% @top_n_albums_overall.each do |album| %>
-  <p><%=album%></p>
+  <p><%=album['album_name']%></p>
 <% end %>
       </ul>
     </div>
@@ -40,30 +40,25 @@
       <h3>Top Artists</h3>
       <ul>
         <% @top_n_artists_overall.each do |artist| %>
-  <p><%=artist%></p>
+  <p><%=artist['name']%></p>
 <% end %>
       </ul>
     </div>
 
     <div class="col-sm-4">
       <h3>Top Songs</h3>
-      <% @top_n_tracks_overall.each do |user| %>
-  <p><%=user%></p>
+      <% @top_n_tracks_overall.each do |track| %>
+  <p><%=track['song_name']%></p>
 <% end %>
     </div>
 
      <div class="col-sm-4">
       <h3>Top Playlists</h3>
-      <% @top_n_playlists_overall.each do |artist| %>
-  <p><%=artist%></p>
+      <% @top_n_playlists_overall.each do |playlist| %>
+  <p><%=playlist['playlist_name']%></p>
 <% end %>
     </div>
- <div class="col-sm-4">
-      <h3>Top Genres</h3>
-      <% @top_n_genres_by_num_saved_overall.each do |artist| %>
-  <p><%artist%></p>
-<% end %>
-    </div>
+
 
   </div>
 </div>

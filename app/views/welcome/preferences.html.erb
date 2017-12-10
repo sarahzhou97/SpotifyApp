@@ -5,24 +5,23 @@
 <div class="form col-sm-9">
     <%= bootstrap_form_tag url: '/preferences_submitted', :html => { :method => 'get' } do |f| %>
     <%= f.form_group :num, label: { text: "Number of Query Results:" } do %>
-      <br>
-      <%= f.radio_button :num, 1, label: "1", inline: true %>
-      <%= f.radio_button :num, 3, label: "3", checked: true, inline: true %>
-      <%= f.radio_button :num, 5, label: "5", inline: true %>
+    <br>
+    <%= f.radio_button :num, 1, label: "1", inline: true %>
+    <%= f.radio_button :num, 3, label: "3", checked: true, inline: true %>
+    <%= f.radio_button :num, 5, label: "5", inline: true %>
     <% end %>
 
-    <%= f.form_group :attr, label: { text: "Song Attributes:" }, wrapper: {class:'row'} do %>
-      <%= f.check_box :popularity, checked: true %>
-      <%= f.check_box :acousticness, checked: true %>
-      <%= f.check_box :danceability, checked: true %>
-      <%= f.check_box :instrumentalness,  checked: true %>
-      <%= f.check_box :energy, checked: true %>
-      <%= f.check_box :liveness, checked: true %>
-      <%= f.check_box :loudness, checked: true %>
-      <%= f.check_box :speechiness,  checked: true %>
-      <%= f.check_box :tempo, checked: true %>
-      <%= f.check_box :time_signature, checked: true %>
-      <%= f.check_box :valence, checked: true %>
+  <%= f.form_group :rec, label: { text: "Recommend Me Songs Based On:" } do %>
+    <br>
+    <%= f.radio_button :popularity, "Acousticness", label: "Acousticness", checked: true, inline:true %>
+    <%= f.radio_button :popularity, "Danceability", label: "Danceability", inline:true %>
+    <%= f.radio_button :popularity, "Instrumentalness", label: "Instrumentalness", inline:true %>
+    <%= f.radio_button :popularity, "Energy", label: "Energy", inline:true %>
+    <%= f.radio_button :popularity, "Liveness", label: "Liveness", inline:true %>
+    <%= f.radio_button :popularity, "Loudness", label: "Loudness", inline:true %>
+    <%= f.radio_button :popularity, "Speechiness", label: "Speechiness", inline:true %>
+    <%= f.radio_button :popularity, "Tempo", label: "Tempo", inline:true %>
+    <%= f.radio_button :popularity, "Valence", label: "Valence", inline:true %>
     <% end %>
 
     <%= f.submit %>

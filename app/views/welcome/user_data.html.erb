@@ -60,7 +60,7 @@
       <h3>Top Albums</h3>
       <ul>
         <% @top_n_albums.each do |album| %>
-          <p><%=album%></p>
+          <p><%=album['album_name']%></p>
         <% end %>
       </ul>
     </div>
@@ -68,34 +68,27 @@
       <h3>Top Artists</h3>
       <ul>
         <% @top_n_artists.each do |artist| %>
-          <p><%=artist%></p>
+          <p><%=artist['name']%></p>
         <% end %>
       </ul>
     </div>
 
-    <div class="col-sm-4">
-      <h3>Top Songs</h3>
-      <% @top_n_songs_recs.each do |song| %>
-        <p><%=song%></p>
-      <% end %>
-    </div>
-
-     <div class="col-sm-4">
-      <h3>Top Playlists</h3>
-      <% @top_n_playlists.each do |playlist| %>
-       <p><%=playlist%></p>
-      <% end %>
-    </div>
-
-
-    <div class="col-sm-4">
-      <h3>Top Genres</h3>
-        <% @top_n_genres.each do |genre| %>
-            <p><%=genre%></p>
-        <% end %>
-    </div>
+    
 
     
+  </div>
+
+  <div class = "row">
+
+   <h2>Song Recommendations Based on <%=$rec%>:</h2>
+
+  <div class="col-sm-4">
+      <h3>Top Songs</h3>
+      <% @top_n_songs_recs.each do |song| %>
+        <p><%=song['track_name']%> - <%=$rec%>: <%=song[$rec]%></p>
+      <% end %>
+    </div>
+
   </div>
 </div>
 
@@ -110,43 +103,4 @@
 <% @check_repeats_users.each do |repeats| %>
   <p><%=repeats%></p>
 <% end %>
-
-
-
-<h2>Top n Spotify users in databased ordered by number of common songs saved with current user</h2>
-<% @top_n_users.each do |user| %>
-  <p><%=user%></p>
-<% end %>
-<h2>Top n albums based on how many of the album's songs the user has saved</h2>
-<% @top_n_albums.each do |album| %>
-  <p><%=album%></p>
-<% end %>
-<h2>Top n artists based on how many of the artists's songs the user has saved</h2>
-<% @top_n_artists.each do |artist| %>
-  <p><%=artist%></p>
-<% end %>
-<h2>Top n songs to recommend to the user that is of one of the user's top x genres, ordered by how closely they match the average tempo of user's saved songs</h2>
-<% @top_n_songs_recs.each do |song| %>
-  <p><%=song%></p>
-<% end %>
-
-<h2>top n playlists based on how closely the avg temp of playlist matches avg tempo of current users saved songs</h2>
-<% @top_n_playlists.each do |playlist| %>
-  <p><%=playlist%></p>
-<% end %>
-
-<h2>top n genres based on users saved songs</h2>
-<% @top_n_genres.each do |genre| %>
-  <p><%=genre%></p>
-<% end %>
-<h2>top n users based on how many playlists created by them the current user follows</h2>
-<% @top_n_users_1.each do |user| %>
-  <p><%=user%></p>
-<% end %>
-<h2>top n users based on how many playlists created by the the current user that they follow</h2>
-<% @top_n_users_2.each do |user| %>
-  <p><%=user%></p>
-<% end %>
-
-
 
