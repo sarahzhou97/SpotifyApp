@@ -17,9 +17,9 @@
  */
 
 :root {
-    --bg: #EBF4EC;
+    --bg: #EDECEC;
     --fnt: #2D2C2C;
-    --greyy: #B7C9B9;
+    --greyy: #DAEDE0;
     --bred: #603A40;
     --nood: #84596B;
 }
@@ -27,6 +27,10 @@
 body {
 	color: var(--fnt);
 	background-color: var(--bg);
+}
+
+html, body, .row, .sidebar {
+	height: 100%;
 }
 
 footer {

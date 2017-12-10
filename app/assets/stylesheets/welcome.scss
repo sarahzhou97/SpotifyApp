@@ -9,17 +9,26 @@ html, body, .container {
 }
 
 .link{
-	font-style: italic;
 	color: var(--fnt);
-	-webkit-transition-duration: 0.4s; /* Safari */
-    transition-duration: 0.4s;
+	-webkit-transition-duration: 0.2s; /* Safari */
+    transition-duration: 0.2s;
 }
 .link:visited {
 	color: var(--fnt);
 }
 
+.front-link {
+	padding: 7px;
+	border: 2px solid var(--fnt);
+}
 .front-link:hover {
-    color: var(--greyy);
+    text-decoration: none;
+    background-color: var(--greyy);
+    border: 2px solid var(--fnt);
+}
+
+.hover-black:hover {
+	color: var(--fnt);
 }
 
 .nav>li>a:hover {
@@ -28,7 +37,8 @@ html, body, .container {
 
 .jumbotron {
 	color: var(--fnt);
-	background-color: var(--greyy);
+	background-color: none;
+	border: 2px solid var(--fnt);
 }
 
 .row .jumbotron {
@@ -37,12 +47,12 @@ html, body, .container {
 
 .logo {
 	font-size: 68px;
+	margin-bottom: 30px;
 }
 
 .page-center {
-	height: 100%;
 	width: 100%;
 	text-align: center;
-	position: fixed;
+	position: relative;
 	top: 25vh;
 }
