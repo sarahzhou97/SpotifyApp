@@ -5,6 +5,19 @@ class WelcomeController < ApplicationController
 
   $spotify_user
 
+    $num = 3
+    $popularity = 1
+    $acousticness= 1
+    $danceability= 1
+    $instrumentalness= 1
+    $energy= 1
+    $liveness= 1
+    $loudness= 1
+    $speechiness= 1
+    $tempo= 1
+    $time_signature= 1
+    $valence= 1
+
   def index
   	
   end
@@ -23,25 +36,45 @@ class WelcomeController < ApplicationController
   def user_info
   end
 
+  def user_preferences
+  end
+
+  def database_preferences
+  end
+
+  def preferences_submitted
+     $num = params[:num]
+    $popularity = params[:popularity]
+    $acousticness= params[:acousticness]
+    $danceability= params[:danceability]
+    $instrumentalness= params[:instrumentalness]
+    $energy= params[:energy]
+    $liveness= params[:liveness]
+    $loudness= params[:loudness]
+    $speechiness= params[:speechiness]
+    $tempo= params[:tempo]
+    $time_signature= params[:time_signature]
+    $valence= params[:valence]
+
+  end
+
+  def user_preferences
+  end
+
   def create_new_user
   
   	rspotify_user = RSpotify::User.new(request.env['omniauth.auth'])
 
     if SpotifyUser.exists?(rspotify_user.id)
-    	$spotify_user = SpotifyUser.new(:user_id => rspotify_user.id,:name =>rspotify_user.display_name)
-    	begin
-        $spotify_user.save
-      rescue => e
-        puts e.message
-        puts "Ignoring..."
-      end
-    else
       $spotify_user = SpotifyUser.find(rspotify_user.id)
+    	
+    else
+      $spotify_user = SpotifyUser.new(:user_id => rspotify_user.id,:name =>rspotify_user.display_name)
+      $spotify_user.save
     end
 
 
     @playlists = rspotify_user.playlists(limit: 7)
-
     	for playlist in @playlists do
       		add_playlist(playlist,rspotify_user.id)
     	end

@@ -34,6 +34,8 @@
 <% end %>
       </ul>
     </div>
+
+
     <div class="col-sm-4">
       <h3>Top Artists</h3>
       <ul>
@@ -59,12 +61,13 @@
  <div class="col-sm-4">
       <h3>Top Genres</h3>
       <% @top_n_genres_by_num_saved_overall.each do |artist| %>
-  <p><%=artist%></p>
+  <p><%artist%></p>
 <% end %>
     </div>
 
   </div>
 </div>
+
 
 <h2>Top n songs ordered by number of users that have saved it</h2>
 <% @top_n_tracks_overall.each do |user| %>

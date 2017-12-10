@@ -18,12 +18,8 @@ html, body, .container {
 	color: var(--fnt);
 }
 
-.link:hover {
+.front-link:hover {
     color: var(--greyy);
-}
-
-.nav>li>a {
-	font-size: 18px;
 }
 
 .nav>li>a:hover {
