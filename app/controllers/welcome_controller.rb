@@ -71,19 +71,17 @@ class WelcomeController < ApplicationController
     else
       $spotify_user = SpotifyUser.new(:user_id => rspotify_user.id,:name =>rspotify_user.display_name)
       $spotify_user.save
-    end
 
+       @playlists = rspotify_user.playlists(limit: 7)
 
-    @playlists = rspotify_user.playlists(limit: 7)
-
-    	for playlist in @playlists do
-      		add_playlist(playlist,rspotify_user.id)
-    	end
+      for playlist in @playlists do
+          add_playlist(playlist,rspotify_user.id)
+      end
 
     @tracks = rspotify_user.saved_tracks(limit: 20)
 
     for track in @tracks do
-    	add_song(track)
+      add_song(track)
       saved = Saved.new(:user_id =>rspotify_user.id, :track_id => track.id)
       begin
         saved.save
@@ -91,13 +89,23 @@ class WelcomeController < ApplicationController
         puts e.message
         puts "Ignoring..."
       end
-  	end
+    end
+    end
+
+
+   
 
     render :user_info
 
   end
 
   def run_queries_global(id)
+
+check_repeats_sql = 'select track_id,user_id, count(*) from saveds group by track_id,user_id having count(*)>1;'
+
+@check_repeats = ActiveRecord::Base.connection.execute(check_repeats_sql)
+
+
 top_n_tracks_overall_sql = 'select t1.track_id, t1.song_name from
     (select saveds.track_id, tracks.song_name, count(*) from saveds
     join tracks on tracks.track_id=saveds.track_id
@@ -255,6 +263,17 @@ top_n_users_1_sql = 'select creator_id from
   @top_n_users_1 = ActiveRecord::Base.connection.execute(top_n_users_1_sql)
 
 top_n_users_2_sql = 'select user_id from
+    (select user_id, count(*)
+      from follows_playlists
+      where follows_playlists.user_id <> '+id+ '::varchar and follows_playlists.playlist_id in
+        (select playlists.playlist_id from playlists where '+id+ '::varchar = playlists.creator_id)
+      group by user_id
+      order by count) as foo
+  limit 2;'
+
+  @top_n_users_2 = ActiveRecord::Base.connection.execute(top_n_users_2_sql)
+
+  top_n_users_2_sql = 'select user_id from
     (select user_id, count(*)
       from follows_playlists
       where follows_playlists.user_id <> '+id+ '::varchar and follows_playlists.playlist_id in
