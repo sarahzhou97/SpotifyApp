@@ -16,14 +16,14 @@
     <div class="row">
     <h2><%= f.form_group :rec, label: { text: "Recommend Me Songs Based on the Following Attribute:" } do %></h2>
       <%= f.radio_button :popularity, "Acousticness", label: "Acousticness", checked: true, inline:true %>
-      <%= f.radio_button :popularity, "Danceability", label: "Danceability", inline:true %>
-      <%= f.radio_button :popularity, "Instrumentalness", label: "Instrumentalness", inline:true %>
-      <%= f.radio_button :popularity, "Energy", label: "Energy", inline:true %>
-      <%= f.radio_button :popularity, "Liveness", label: "Liveness", inline:true %>
-      <%= f.radio_button :popularity, "Loudness", label: "Loudness", inline:true %>
-      <%= f.radio_button :popularity, "Speechiness", label: "Speechiness", inline:true %>
-      <%= f.radio_button :popularity, "Tempo", label: "Tempo", inline:true %>
-      <%= f.radio_button :popularity, "Valence", label: "Valence", inline:true %>
+      <%= f.radio_button :danceability, "Danceability", label: "Danceability", inline:true %>
+      <%= f.radio_button :instrumentalness, "Instrumentalness", label: "Instrumentalness", inline:true %>
+      <%= f.radio_button :energy, "Energy", label: "Energy", inline:true %>
+      <%= f.radio_button :liveness, "Liveness", label: "Liveness", inline:true %>
+      <%= f.radio_button :loudness, "Loudness", label: "Loudness", inline:true %>
+      <%= f.radio_button :speechiness, "Speechiness", label: "Speechiness", inline:true %>
+      <%= f.radio_button :tempo, "Tempo", label: "Tempo", inline:true %>
+      <%= f.radio_button :valence, "Valence", label: "Valence", inline:true %>
 
     <% end %>
   </div>
