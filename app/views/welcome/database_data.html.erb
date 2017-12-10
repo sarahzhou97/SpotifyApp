@@ -49,6 +49,7 @@
       <h3>Top Songs</h3>
       <% @top_n_tracks_overall.each do |track| %>
   <p><%=track['song_name']%></p>
+ 
 <% end %>
     </div>
 
@@ -62,25 +63,3 @@
 
   </div>
 </div>
-
-
-<h2>Top n songs ordered by number of users that have saved it</h2>
-<% @top_n_tracks_overall.each do |user| %>
-  <p><%=user%></p>
-<% end %>
-<h2>top n albums with the most songs</h2>
-<% @top_n_albums_overall.each do |album| %>
-  <p><%=album%></p>
-<% end %>
-<h2>Top n artists ordered by number of users that have saved their songs</h2>
-<% @top_n_artists_overall.each do |artist| %>
-  <p><%=artist%></p>
-<% end %>
-<h2>Top n playlists ordered by number of users that have followed it</h2>
-<% @top_n_playlists_overall.each do |artist| %>
-  <p><%=artist%></p>
-<% end %>
-<h2>top n albums since x date based on how many songs in it have been saved by users since x</h2>
-<% @top_n_albums_by_num_saved_overall.each do |album| %>
-  <p><%=album%></p>
-<% end %>

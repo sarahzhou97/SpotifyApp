@@ -65,9 +65,7 @@ class WelcomeController < ApplicationController
       saved = Saved.new(:user_id =>rspotify_user.id, :track_id => track.id)
       begin
         saved.save
-      rescue => e
-        puts e.message
-        puts "Ignoring..."
+      rescue 
       end
     end
     
