@@ -5,7 +5,7 @@ class WelcomeController < ApplicationController
 
   $spotify_user
 
-     $num = 3
+    $num = 3
     $popularity = 1
     $acousticness= 1
     $danceability= 1
@@ -72,11 +72,18 @@ class WelcomeController < ApplicationController
       $spotify_user = SpotifyUser.new(:user_id => rspotify_user.id,:name =>rspotify_user.display_name)
       $spotify_user.save
 
+<<<<<<< HEAD
        @playlists = rspotify_user.playlists(limit: 7)
 
       for playlist in @playlists do
           add_playlist(playlist,rspotify_user.id)
       end
+=======
+    @playlists = rspotify_user.playlists(limit: 7)
+    	for playlist in @playlists do
+      		add_playlist(playlist,rspotify_user.id)
+    	end
+>>>>>>> 5f986c4fcba6f74351dbdb3cdd7b8d7a1d1a7c7e
 
     @tracks = rspotify_user.saved_tracks(limit: 20)
 

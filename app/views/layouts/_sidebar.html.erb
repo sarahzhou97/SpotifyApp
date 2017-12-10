@@ -1,11 +1,11 @@
 
 <div class="col-sm-3 sidebar">
-	<h2>Musaic</h2>
+
+	<h1>Spotify Analyzer</h1>
 	<ul class="nav nav-sidebar">
-		<li><%= link_to "User Data", '/userdata' %></li>
-		<li><%= link_to "Global Data", '/databasedata' %></li>
-		<li><%= link_to "Preferences", "/preferences" %></li>
-		<li><%= link_to "User Information", "/userinfo" %></li>
-		
+		<li><%= link_to "User Data", '/userdata', {:class => "link" } %></li>
+		<li><%= link_to "Global Data", '/databasedata', {:class => "link" } %></li>
+		<li><%= link_to "Our Database", "/userinfo", {:class => "link" } %></li>
+		<li><%= link_to "Account", "#", {:class => "link" } %></li>
 	</ul>
 </div>

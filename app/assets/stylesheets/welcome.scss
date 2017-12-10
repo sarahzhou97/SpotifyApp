@@ -1,3 +1,48 @@
 // Place all the styles related to the Welcome controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
+
+html, body, .container {
+	height: 100%;
+	width: 100%;
+	padding: 15px;
+}
+
+.link{
+	font-style: italic;
+	color: var(--fnt);
+	-webkit-transition-duration: 0.4s; /* Safari */
+    transition-duration: 0.4s;
+}
+.link:visited {
+	color: var(--fnt);
+}
+
+.front-link:hover {
+    color: var(--greyy);
+}
+
+.nav>li>a:hover {
+	background-color: var(--greyy);
+}
+
+.jumbotron {
+	color: var(--fnt);
+	background-color: var(--greyy);
+}
+
+.row .jumbotron {
+	margin-right: 15px;
+}
+
+.logo {
+	font-size: 68px;
+}
+
+.page-center {
+	height: 100%;
+	width: 100%;
+	text-align: center;
+	position: fixed;
+	top: 25vh;
+}
