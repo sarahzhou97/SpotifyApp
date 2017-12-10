@@ -5,7 +5,7 @@ class WelcomeController < ApplicationController
 
   $spotify_user
 
-    $num = 3
+     $num = '3'
     $popularity = 1
     $acousticness= 1
     $danceability= 1
@@ -19,7 +19,7 @@ class WelcomeController < ApplicationController
     $valence= 1
 
   def index
-  	
+    
   end
   
   def start
@@ -63,11 +63,11 @@ class WelcomeController < ApplicationController
 
   def create_new_user
   
-  	rspotify_user = RSpotify::User.new(request.env['omniauth.auth'])
+    rspotify_user = RSpotify::User.new(request.env['omniauth.auth'])
 
     if SpotifyUser.exists?(rspotify_user.id)
       $spotify_user = SpotifyUser.find(rspotify_user.id)
-    	
+      
     else
       $spotify_user = SpotifyUser.new(:user_id => rspotify_user.id,:name =>rspotify_user.display_name)
       $spotify_user.save
@@ -75,14 +75,15 @@ class WelcomeController < ApplicationController
 
 
     @playlists = rspotify_user.playlists(limit: 7)
-    	for playlist in @playlists do
-      		add_playlist(playlist,rspotify_user.id)
-    	end
+
+      for playlist in @playlists do
+          add_playlist(playlist,rspotify_user.id)
+      end
 
     @tracks = rspotify_user.saved_tracks(limit: 20)
 
     for track in @tracks do
-    	add_song(track)
+      add_song(track)
       saved = Saved.new(:user_id =>rspotify_user.id, :track_id => track.id)
       begin
         saved.save
@@ -90,7 +91,7 @@ class WelcomeController < ApplicationController
         puts e.message
         puts "Ignoring..."
       end
-  	end
+    end
 
     render :user_info
 
@@ -98,32 +99,32 @@ class WelcomeController < ApplicationController
 
   def run_queries_global(id)
 top_n_tracks_overall_sql = 'select t1.track_id, t1.song_name from
-    (select saveds.track_id, tracks.song_name, count(*) from saveds
-    join tracks on tracks.track_id=saveds.track_id
-    group by saveds.track_id, song_name
-    order by count) t1
-  limit 2;'
+    (select saveds.track_id, tracks.song_name, count(*) from saveds, tracks
+    where tracks.track_id=saveds.track_id
+    group by saveds.track_id, tracks.song_name
+    order by count desc) t1
+  limit ' +$num+ '::bigint;'
 
 
 @top_n_tracks_overall = ActiveRecord::Base.connection.execute(top_n_tracks_overall_sql)
 
 top_n_playlists_overall_sql = 'select t1.playlist_id, t1.playlist_name from
     (select playlists.playlist_id, playlists.playlist_name, count(*) 
-    from follows_playlists
-    join playlists on follows_playlists.playlist_id = playlists.playlist_id
+    from follows_playlists, playlists
+    where follows_playlists.playlist_id = playlists.playlist_id
     group by playlists.playlist_id, playlists.playlist_name
-    order by count) t1
-  limit 2;'
+    order by count desc) t1
+  limit ' +$num+ '::bigint;'
 
   @top_n_playlists_overall = ActiveRecord::Base.connection.execute(top_n_playlists_overall_sql)
 
 top_n_artists_overall_sql = 'select t1.artist_id, t1.name from
     (select artists.artist_id,artists.name, count(*) 
-    from saveds join tracks on saveds.track_id = tracks.track_id
-    join artists on artists.artist_id = tracks.artist_id
+    from saveds, tracks, artists
+    where saveds.track_id = tracks.track_id and artists.artist_id = tracks.artist_id
     group by artists.artist_id, artists.name
-    order by count) t1
-  limit 2;'
+    order by count desc) t1
+  limit ' +$num+ '::bigint;'
 
 @top_n_artists_overall = ActiveRecord::Base.connection.execute(top_n_artists_overall_sql)
 
@@ -132,21 +133,20 @@ top_n_albums_overall_sql = 'select t1.album_name
     from albums, tracks
     where albums.album_id=tracks.album_id
     group by album_name
-    order by count) as t1
-limit 2;
+    order by count desc) as t1
+limit ' +$num+ '::bigint;
 '
 
 @top_n_albums_overall=ActiveRecord::Base.connection.execute(top_n_albums_overall_sql)
 
-top_n_albums_by_num_saved_overall_sql = "select t1.album_name from
+top_n_albums_by_num_saved_overall_sql = 'select t1.album_name from
     (select albums.album_id, albums.album_name, count(*) as count
-      from saveds join tracks on saveds.track_id = tracks.track_id
-      join albums on albums.album_id = tracks.album_id
+      from saveds, tracks, albums
+      where saveds.track_id = tracks.track_id and albums.album_id = tracks.album_id
       group by albums.album_id, albums.album_name
-      order by count
-      ) as t1, albums
-    where albums.release_date >= '2000-01-01' and albums.album_id = t1.album_id
-  limit 2;"
+      order by count desc
+      ) as t1
+  limit ' +$num+ '::bigint;'
 
   @top_n_albums_by_num_saved_overall=ActiveRecord::Base.connection.execute(top_n_albums_by_num_saved_overall_sql)
 
@@ -155,8 +155,8 @@ top_n_albums_by_num_saved_overall_sql = "select t1.album_name from
     from tracks, albums
     where albums.album_id = tracks.album_id and track_id in (select track_id from saveds)
     group by albums.genre
-    order by count) as t1 
-limit 2;'
+    order by count desc) as t1 
+limit ' +$num+ '::bigint;'
 
 @top_n_genres_by_num_saved_overall=ActiveRecord::Base.connection.execute(top_n_genres_by_num_saved_overall_sql)
 end
@@ -172,8 +172,8 @@ end
     where saveds.user_id<> ' +id+ '::varchar and saveds.track_id in 
       (select track_id from saveds where user_id = '+id+ '::varchar)
     group by user_id
-    order by count) t1
-  limit 2;'
+    order by count desc) t1
+  limit ' +$num+ '::bigint;'
 
     @top_n_users = ActiveRecord::Base.connection.execute(top_n_users_sql)
 
@@ -187,21 +187,21 @@ end
 
     top_n_albums_sql = 'select t1.album_id, t1.album_name, count(*) from
     (select albums.album_id,albums.album_name,s.track_id from 
-      (select * from saveds where saveds.user_id = ' +id+ '::varchar) s, tracks
-      join albums on tracks.album_id = albums.album_id
+      (select * from saveds where saveds.user_id = ' +id+ '::varchar) s, tracks, albums
+      where albums.album_id = tracks.album_id and tracks.track_id=s.track_id
     ) t1
   group by t1.album_id,t1.album_name
-  order by count
-  limit 2;'
+  order by count desc
+  limit ' +$num+ '::bigint;'
 
   @top_n_albums = ActiveRecord::Base.connection.execute(top_n_albums_sql)
 
   top_n_artists_sql = 'select artists.artist_id,name, count(*) from
-    (select * from saveds where saveds.user_id = '+id+ '::varchar) s, tracks
-    join artists on tracks.artist_id = artists.artist_id
+    (select * from saveds where saveds.user_id = '+id+ '::varchar) s, tracks, artists
+    where artists.artist_id = tracks.artist_id and tracks.track_id=s.track_id
     group by artists.artist_id,artists.name
-    order by count
-  limit 2;'
+    order by count desc
+  limit ' +$num+ '::bigint;'
 
   @top_n_artists = ActiveRecord::Base.connection.execute(top_n_artists_sql)
 
@@ -215,10 +215,10 @@ end
         from tracks, albums
         where albums.album_id = tracks.album_id and track_id in (select track_id from saveds where saveds.user_id = '+id+ '::varchar)
         group by genre
-        order by count) as t1 
+        order by count desc) as t1 
         limit 2)) as t3
     order by tempo_diff asc) as t2
-  limit 2;'
+  limit ' +$num+ '::bigint;'
 
   @top_n_songs_recs = ActiveRecord::Base.connection.execute(top_n_songs_recs_sql)
 
@@ -228,7 +228,7 @@ end
         where playlist_contains.track_id = tracks.track_id and playlists.playlist_id=playlist_contains.playlist_id and playlists.creator_id <> '+ id+ '::varchar
         group by playlists.playlist_id) t2
     order by tempo_diff asc) as t1 
-  limit 2;'
+  limit ' +$num+ '::bigint;'
 
   @top_n_playlists = ActiveRecord::Base.connection.execute(top_n_playlists_sql)
 
@@ -237,8 +237,8 @@ end
     from tracks, albums
     where albums.album_id = tracks.album_id and track_id in (select track_id from saveds where saveds.user_id = '+id+ '::varchar)
     group by albums.genre
-    order by count) as t1 
-limit 2;'
+    order by count desc) as t1 
+limit ' +$num+ '::bigint;'
 
 @top_n_genres = ActiveRecord::Base.connection.execute(top_n_genres_sql)
 
@@ -248,8 +248,8 @@ top_n_users_1_sql = 'select creator_id from
       where playlists.playlist_id in
         (select follows_playlists.playlist_id from follows_playlists where '+id+ '::varchar = follows_playlists.user_id)
       group by creator_id
-      order by count) as foo
-  limit 2;'
+      order by count desc) as foo
+  limit ' +$num+ '::bigint;'
 
   @top_n_users_1 = ActiveRecord::Base.connection.execute(top_n_users_1_sql)
 
@@ -259,8 +259,8 @@ top_n_users_2_sql = 'select user_id from
       where follows_playlists.user_id <> '+id+ '::varchar and follows_playlists.playlist_id in
         (select playlists.playlist_id from playlists where '+id+ '::varchar = playlists.creator_id)
       group by user_id
-      order by count) as foo
-  limit 2;'
+      order by count desc) as foo
+  limit ' +$num+ '::bigint;'
 
   @top_n_users_2 = ActiveRecord::Base.connection.execute(top_n_users_2_sql)
 
