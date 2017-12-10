@@ -29,7 +29,12 @@ class WelcomeController < ApplicationController
 
     if SpotifyUser.exists?(rspotify_user.id)
     	$spotify_user = SpotifyUser.new(:user_id => rspotify_user.id,:name =>rspotify_user.display_name)
-    	$spotify_user.save
+    	begin
+        $spotify_user.save
+      rescue => e
+        puts e.message
+        puts "Ignoring..."
+      end
     else
       $spotify_user = SpotifyUser.find(rspotify_user.id)
     end
