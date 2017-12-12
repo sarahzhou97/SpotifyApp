@@ -30,11 +30,11 @@
   </center>
   <div class="col-sm-4">
       <h3>Saved Songs</h3>
-      <% if @top_n_users.blank? %>
-        <li>No Users with Common Saved Songs</li>
+      <% if !@top_n_users.any? %>
+        <p>No Users with Common Saved Songs</p>
       <%else%>
       <ul>
-        <% @top_n_users.each do |user| %>
+        <% !@top_n_users.each do |user| %>
           <li><%=user['name']%></li>
         <% end %>
       </ul>
@@ -43,8 +43,8 @@
 
     <div class="col-sm-4">
       <h3>Playlists You Follow</h3>
-      <% if @top_n_users_1.blank? %>
-        <li>You Follow No Other Users' Playlists</li>
+      <% if !@top_n_users_1.any? %>
+        <p>You Follow No Other Users' Playlists</p>
       <%else%>
       <ul>
         <% @top_n_users_1.each do |user| %>
@@ -56,8 +56,8 @@
 
     <div class="col-sm-4">
       <h3>Your Playlists</h3>
-      <% if @top_n_users_2.blank? %>
-        <li>No One Follows Your Playlists</li>
+      <% if !@top_n_users_2.any? %>
+        <p>No One Follows Your Playlists</p>
       <%else%>
       <ul>
         <% @top_n_users_2.each do |user| %>
