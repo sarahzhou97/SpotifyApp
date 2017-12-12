@@ -10,28 +10,15 @@
     <p>Analysis on the entire database across all users.</p>
   </center>
 
-    
-    <div class="col-sm-4">
-      <%= pie_chart({"R&B" => 10, "Pop" => 5},
-                    height:"200px", 
-                    width: "100%", 
-                    donut: "true") %>
-    </div>
-    <div class="col-sm-4">
-      <%= line_chart({"Jan" => 10, "March" => 23, "July" => 123, "August" => 215, "October" => 34},
-                    height:"200px", 
-                    width: "100%") %>
-    </div>
-    <div class="col-sm-4">
-      <%= column_chart({"Jan" => 10, "March" => 23, "July" => 123, "August" => 215, "October" => 34},
-                      height:"200px", 
+ <%= column_chart({"Danceability" => @danceability*100, "Popularity" => @popularity, "Acousticness" => @acousticness*100, "Instrumentalness"=>@instrumentalness*100,"Energy" =>@energy*100,"Liveness"=>@liveness*100,"Loudness"=>(@loudness+60)/60*100,"Tempo"=>@tempo},
+                      height:"400px", 
                       width: "100%") %>
-    </div>
+
+ 
   </div>
-  <div class="row">
+  
 
-
-     <div class="col-sm-5">
+ <div class="col-sm-5">
 
       <h3>Top Albums</h3>
       <ul>
@@ -65,6 +52,7 @@
   <p><%=playlist['playlist_name']%></p>
 <% end %>
     </div>
-  </div>
+  
+     
  
 </div>

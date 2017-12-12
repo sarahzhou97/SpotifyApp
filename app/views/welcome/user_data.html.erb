@@ -9,7 +9,7 @@
     <center>
     <h1>Average Song Attribute Values</h1>
     </center>
-   <%= column_chart({"Danceability" => @danceability*100, "Popularity" => @popularity, "Acousticness" => @acousticness*100, "Instrumentalness"=>@instrumentalness*100,"Energy" =>@energy*100,"Liveness"=>@liveness*100,"Loudness"=>(@loudness+60)/60*100,"Tempo"=>@tempo},
+   <%= column_chart({"Danceability" => @danceability_user*100, "Popularity" => @popularity_user, "Acousticness" => @acousticness_user*100, "Instrumentalness"=>@instrumentalness_user*100,"Energy" =>@energy_user*100,"Liveness"=>@liveness_user*100,"Loudness"=>(@loudness_user+60)/60*100,"Tempo"=>@tempo_user},
                       height:"400px", 
                       width: "100%") %>
   

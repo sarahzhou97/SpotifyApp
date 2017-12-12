@@ -8,6 +8,8 @@ class WelcomeController < ApplicationController
      $num = '3'
     $rec = 'Acousticness'
 
+    
+
   def index
     
   end
@@ -79,6 +81,18 @@ class WelcomeController < ApplicationController
   end
 
   def run_queries_global(id)
+
+    @popularity = Track.average("popularity")
+@danceability = Track.average("danceability")
+@acousticness = Track.average("acousticness")
+@instrumentalness = Track.average("instrumentalness")
+@energy = Track.average("energy")
+@liveness = Track.average("liveness")
+@loudness = Track.average("loudness")
+@tempo = Track.average("tempo")
+@valence = Track.average("valence")
+
+
 top_n_tracks_overall_sql = 'select t1.track_id, t1.song_name from
     (select saveds.track_id, tracks.song_name, count(*) from saveds, tracks
     where tracks.track_id=saveds.track_id
@@ -138,23 +152,17 @@ end
   def run_queries_user(id)
 
 
-@popularity = Track.average("popularity")
-@danceability = Track.average("danceability")
-@acousticness = Track.average("acousticness")
-@instrumentalness = Track.average("instrumentalness")
-@energy = Track.average("energy")
-@liveness = Track.average("liveness")
-@loudness = Track.average("loudness")
-@tempo = Track.average("tempo")
-@valence = Track.average("valence")
+    @popularity_user = Saved.where(user_id: id).joins("INNER JOIN tracks on tracks.track_id = tracks.track_id").average("popularity")
+@danceability_user = Saved.where(user_id: id).joins("INNER JOIN tracks on tracks.track_id = tracks.track_id").average("danceability")
+@acousticness_user = Saved.where(user_id: id).joins("INNER JOIN tracks on tracks.track_id = tracks.track_id").average("acousticness")
+@instrumentalness_user = Saved.where(user_id: id).joins("INNER JOIN tracks on tracks.track_id = tracks.track_id").average("instrumentalness")
+@energy_user = Saved.where(user_id: id).joins("INNER JOIN tracks on tracks.track_id = tracks.track_id").average("energy")
+@liveness_user = Saved.where(user_id: id).joins("INNER JOIN tracks on tracks.track_id = tracks.track_id").average("liveness")
+@loudness_user = Saved.where(user_id: id).joins("INNER JOIN tracks on tracks.track_id = tracks.track_id").average("loudness")
+@tempo_user = Saved.where(user_id: id).joins("INNER JOIN tracks on tracks.track_id = tracks.track_id").average("tempo")
+@valence_user = Saved.where(user_id: id).joins("INNER JOIN tracks on tracks.track_id = tracks.track_id").average("valence")
 
-check_repeats_sql = 'select track_id, count(*) from tracks group by track_id having count(*)>1;'
- 
- @check_repeats = ActiveRecord::Base.connection.execute(check_repeats_sql)
- 
- check_repeats_users_sql = 'select user_id, count(*) from spotify_users group by user_id having count(*)>1;'
- 
- @check_repeats_users = ActiveRecord::Base.connection.execute(check_repeats_users_sql)
+
     top_n_users_sql = 'select t2.user_id, name from (select t1.user_id from 
     (select saveds.user_id, name, count(*) 
     from saveds, spotify_users 
