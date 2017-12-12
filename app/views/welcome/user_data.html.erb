@@ -11,7 +11,7 @@
       <center>
         <h2>Your Song Attributes</h2>
       </center>
-      <%=if !@danceability_user.blank? or !@danceability_user.blank? or !@danceability_user.blank? or !@danceability_user.blank? or !@danceability_user.blank? or !@danceability_user.blank? or !@danceability_user.blank? or !@danceability_user.blank? or !@danceability_user.blank?%>
+      <%=if !@danceability_user.blank? or !@popularity_user.blank? or !@acousticness_user.blank? or !@instrumentalness_user.blank? or !@energy_user.blank? or !@liveness_user.blank? or !@loudness_user.blank? or !@tempo_user.blank?%>
         <%= column_chart({"Danceability" => 45.698, "Popularity" => 35.45, "Acousticness" => 78.345, "Instrumentalness"=>24.567,"Energy" =>43.27,"Liveness"=>89.32,"Loudness"=>78.38,"Tempo"=>99.53},
         height:"250px", width: "100%", colors: ["#1DC465"]) %>
       <%=else%>
