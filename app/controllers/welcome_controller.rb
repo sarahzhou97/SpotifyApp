@@ -89,6 +89,7 @@ class WelcomeController < ApplicationController
 @energy = Track.average("energy")
 @liveness = Track.average("liveness")
 @loudness = Track.average("loudness")
+@speechiness = Track.average("speechiness")
 @tempo = Track.average("tempo")
 @valence = Track.average("valence")
 
@@ -160,6 +161,7 @@ end
 @instrumentalness_user = Saved.where(user_id: id).joins("INNER JOIN tracks on saveds.track_id = tracks.track_id").average("instrumentalness")
 @energy_user = Saved.where(user_id: id).joins("INNER JOIN tracks on saveds.track_id = tracks.track_id").average("energy")
 @liveness_user = Saved.where(user_id: id).joins("INNER JOIN tracks on saveds.track_id = tracks.track_id").average("liveness")
+@speechiness_user = Saved.where(user_id: id).joins("INNER JOIN tracks on saveds.track_id = tracks.track_id").average("speechiness")
 @loudness_user = Saved.where(user_id: id).joins("INNER JOIN tracks on saveds.track_id = tracks.track_id").average("loudness")
 @tempo_user = Saved.where(user_id: id).joins("INNER JOIN tracks on saveds.track_id = tracks.track_id").average("tempo")
 @valence_user = Saved.where(user_id: id).joins("INNER JOIN tracks on saveds.track_id = tracks.track_id").average("valence")

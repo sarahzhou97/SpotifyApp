@@ -9,7 +9,7 @@
       <p>Analysis on the entire database across all users.</p>
     </center>
 
-     <%= column_chart({"Danceability" => @danceability*100, "Popularity" => @popularity, "Acousticness" => @acousticness*100, "Instrumentalness"=>@instrumentalness*100,"Energy" =>@energy*100,"Liveness"=>@liveness*100,"Loudness"=>(@loudness+60)/60*100,"Tempo"=>@tempo},colors: ["#1DC465"], height:"250px", width: "100%") %>
+     <%= column_chart({"Danceability" => @danceability*100, "Popularity" => @popularity, "Acousticness" => @acousticness*100, "Instrumentalness"=>@instrumentalness*100,"Energy" =>@energy*100,"Liveness"=>@liveness*100,"Loudness"=>(@loudness+60)/60*100,"Speechiness"=>@speechiness*100,"Tempo"=>@tempo},colors: ["#1DC465"], height:"250px", width: "100%") %>
   </div>
   
   <div class="row">
