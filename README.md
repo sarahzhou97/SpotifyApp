@@ -1,6 +1,8 @@
 Musaic
 =====================
 
+[I'm an inline-style link with title](https://sleepy-fjord-10699.herokuapp.com/ "Heroku Link")
+
 ##Introduction
 
 Musaic is a Spotify analyzer application that allows users sign into their Spotify accounts to see interesting analyses about their music tastes, get song recommendations based on specified song attributes, and how they compare to other users in the database.
