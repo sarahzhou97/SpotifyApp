@@ -93,10 +93,10 @@ class WelcomeController < ApplicationController
 @valence = Track.average("valence")
 
 
-top_n_tracks_overall_sql = 'select t1.track_id, t1.song_name from
-    (select saveds.track_id, tracks.song_name, count(*) from saveds, tracks
-    where tracks.track_id=saveds.track_id
-    group by saveds.track_id, tracks.song_name
+top_n_tracks_overall_sql = 'select t1.track_id, t1.song_name, t1.name from
+    (select saveds.track_id, tracks.song_name, artists.name, count(*) from saveds, tracks, artists
+    where tracks.track_id=saveds.track_id and tracks.artist_id=artists.artist_id
+    group by saveds.track_id, tracks.song_name, artists.name
     order by count desc) t1
   limit ' +$num+ '::bigint;'
 
@@ -123,12 +123,14 @@ top_n_artists_overall_sql = 'select t1.artist_id, t1.name from
 
 @top_n_artists_overall = ActiveRecord::Base.connection.execute(top_n_artists_overall_sql)
 
-top_n_albums_overall_sql = 'select t1.album_name 
-  from (select album_name, count(*) as count
+top_n_albums_overall_sql = 'select t1.album_name, artists.name
+  from artists, (select album_name, albums.artist_id, count(*) as count
     from albums, tracks
     where albums.album_id=tracks.album_id
-    group by album_name
+    group by album_name, albums.artist_id
     order by count desc) as t1
+  where artists.artist_id=t1.artist_id
+  group by t1.album_name, artists.name
 limit ' +$num+ '::bigint;
 '
 

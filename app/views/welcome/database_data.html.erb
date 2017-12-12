@@ -17,7 +17,7 @@
       <h3>Top Albums</h3>
       <ul>
         <% @top_n_albums_overall.each do |album| %>
-          <p><%=album['album_name']%></p>
+          <p>&ldquo;<%=album['album_name']%>&rdquo; - <%=album['name']%></p>
         <% end %>
       </ul>
     </div>
@@ -36,7 +36,7 @@
       <h3>Top Songs</h3>
       <ul>
         <% @top_n_tracks_overall.each do |track| %>
-          <p><%=track['song_name']%></p>
+          <p>&ldquo;<%=track['song_name']%>&rdquo; - <%=track['name']%></p>
         <% end %>
       </ul>
     </div>
