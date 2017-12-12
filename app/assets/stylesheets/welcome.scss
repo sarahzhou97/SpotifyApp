@@ -6,6 +6,7 @@ html, body, .container {
 	height: 100%;
 	width: 100%;
 	padding: 15px;
+	margin-bottom: 30px;
 }
 
 .link{
@@ -45,7 +46,7 @@ html, body, .container {
 }
 .jumbotron {
 	color: var(--fnt);
-	background-color: none;
+	background-color: var(--bg);
 	border: 2px solid var(--fnt);
 }
 
@@ -64,6 +65,10 @@ html, body, .container {
 .logo {
 	font-size: 68px;
 	margin-bottom: 30px;
+}
+
+.border {
+	border: 2px solid var(--fnt)
 }
 
 .page-center {

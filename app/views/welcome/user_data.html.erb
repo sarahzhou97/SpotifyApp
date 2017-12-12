@@ -12,7 +12,7 @@
         <h2>Your Song Attributes</h2>
       </center>
       <%= column_chart({"Danceability" => @danceability_user*100, "Popularity" => @popularity_user, "Acousticness" => @acousticness_user*100, "Instrumentalness"=>@instrumentalness_user*100,"Energy" =>@energy_user*100,"Liveness"=>@liveness_user*100,"Loudness"=>(@loudness_user+60)/60*100,"Tempo"=>@tempo_user},
-        height:"250px", width: "100%") %>
+        height:"250px", width: "100%", colors: ["#1DC465"]) %>
     </div>
     <div class="col-sm-5">
       <h2>Suggested songs</h2>
@@ -65,6 +65,8 @@
           <p><%=song['song_name']%></p>
         <% end %>
       </ul>
+    </div>
+    <div class="col-sm-4">
       <h3>Top Albums</h3>
       <ul>
         <% @top_n_albums.each do |album| %>

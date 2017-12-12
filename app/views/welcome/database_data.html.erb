@@ -4,55 +4,50 @@
 
 <div class="col-sm-9">
   <div class="row jumbotron">
+    <center>
+      <h1>Global Statistics</h1>
+      <p>Analysis on the entire database across all users.</p>
+    </center>
 
-  <center>
-  <h1>Global Statistics</h1>
-    <p>Analysis on the entire database across all users.</p>
-  </center>
-
- <%= column_chart({"Danceability" => @danceability*100, "Popularity" => @popularity, "Acousticness" => @acousticness*100, "Instrumentalness"=>@instrumentalness*100,"Energy" =>@energy*100,"Liveness"=>@liveness*100,"Loudness"=>(@loudness+60)/60*100,"Tempo"=>@tempo},
-                      height:"400px", 
-                      width: "100%") %>
-
- 
+     <%= column_chart({"Danceability" => @danceability*100, "Popularity" => @popularity, "Acousticness" => @acousticness*100, "Instrumentalness"=>@instrumentalness*100,"Energy" =>@energy*100,"Liveness"=>@liveness*100,"Loudness"=>(@loudness+60)/60*100,"Tempo"=>@tempo},colors: ["#1DC465"], height:"250px", width: "100%") %>
   </div>
   
-
- <div class="col-sm-5">
-
+  <div class="row">
+    <div class="col-sm-6">
       <h3>Top Albums</h3>
       <ul>
         <% @top_n_albums_overall.each do |album| %>
-  <p><%=album['album_name']%></p>
-<% end %>
+          <p><%=album['album_name']%></p>
+        <% end %>
       </ul>
     </div>
 
-
-    <div class="col-sm-5">
+    <div class="col-sm-6">
       <h3>Top Artists</h3>
       <ul>
         <% @top_n_artists_overall.each do |artist| %>
-  <p><%=artist['name']%></p>
-<% end %>
+          <p><%=artist['name']%></p>
+        <% end %>
+      </ul>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-sm-6">
+      <h3>Top Songs</h3>
+      <ul>
+        <% @top_n_tracks_overall.each do |track| %>
+          <p><%=track['song_name']%></p>
+        <% end %>
       </ul>
     </div>
 
-    <div class="col-sm-5">
-      <h3>Top Songs</h3>
-      <% @top_n_tracks_overall.each do |track| %>
-  <p><%=track['song_name']%></p>
- 
-<% end %>
-    </div>
-
-     <div class="col-sm-5">
+    <div class="col-sm-6">
       <h3>Top Playlists</h3>
-      <% @top_n_playlists_overall.each do |playlist| %>
-  <p><%=playlist['playlist_name']%></p>
-<% end %>
+      <ul>
+        <% @top_n_playlists_overall.each do |playlist| %>
+          <p><%=playlist['playlist_name']%></p>
+        <% end %>
+      </ul>
     </div>
-  
-     
- 
+  </div> 
 </div>
