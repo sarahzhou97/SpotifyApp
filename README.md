@@ -16,9 +16,11 @@ Musaic is a Spotify analyzer application that allows users sign into their Spoti
 ![picture](img/erdiagram.png)
 
 ##Assumptions
+
 A user can follow many playlists. A playlist can be followed by many users. A playlist can be created by one person. A user can save many tracks and a track can be saved by many users. Each track/album has attribute artistid that indicates they can be by only one artist. A playlist can contain many tracks and a track can be contained by many playlists. Each track is guaranteed to have one album and one artist it belongs to. 
 
 ##Descriptions
+
 Albums(album_id, album_type, artist_id, genre, release_date, album_name, popularity)
 
 * Each tuple represents an album
