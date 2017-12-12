@@ -60,7 +60,7 @@
 
     
     <div class="col-sm-6">
-      <h3>Top Albums</h3>
+      <h3>Your Top Albums</h3>
       <ul>
         <% @top_n_albums.each do |album| %>
           <p><%=album['album_name']%> - <%=album['artist_id']%></p>
@@ -68,7 +68,7 @@
       </ul>
     </div>
     <div class="col-sm-6">
-      <h3>Top Artists</h3>
+      <h3>Your Top Artists</h3>
       <ul>
         <% @top_n_artists.each do |artist| %>
           <p><%=artist['name']%></p>
