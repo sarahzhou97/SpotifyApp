@@ -4,9 +4,32 @@
 
 <div class="col-sm-9">
   <div class="row jumbotron">
+
   <center>
-  <h1>Here's What We Know About All of Our Users</h1>
+  <h1>Global Statistics</h1>
+    <p>Analysis on the entire database across all users.</p>
   </center>
+
+    
+    <div class="col-sm-4">
+      <%= pie_chart({"R&B" => 10, "Pop" => 5},
+                    height:"200px", 
+                    width: "100%", 
+                    donut: "true") %>
+    </div>
+    <div class="col-sm-4">
+      <%= line_chart({"Jan" => 10, "March" => 23, "July" => 123, "August" => 215, "October" => 34},
+                    height:"200px", 
+                    width: "100%") %>
+    </div>
+    <div class="col-sm-4">
+      <%= column_chart({"Jan" => 10, "March" => 23, "July" => 123, "August" => 215, "October" => 34},
+                      height:"200px", 
+                      width: "100%") %>
+    </div>
+  </div>
+  <div class="row">
+
 
      <div class="col-sm-5">
 
