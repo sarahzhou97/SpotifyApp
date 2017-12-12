@@ -7,14 +7,14 @@
 <div class="col-sm-9">
   <div class="jumbotron">
     <div class="row">
-      <div class = "col-sm-7">
+      <div class = "col-sm-8">
       <center>
         <h2>Your Song Attributes</h2>
       </center>
       <%= column_chart({"Danceability" => @danceability_user*100, "Popularity" => @popularity_user, "Acousticness" => @acousticness_user*100, "Instrumentalness"=>@instrumentalness_user*100,"Energy" =>@energy_user*100,"Liveness"=>@liveness_user*100,"Loudness"=>(@loudness_user+60)/60*100,"Tempo"=>@tempo_user},
         height:"250px", width: "100%", colors: ["#1DC465"]) %>
     </div>
-    <div class="col-sm-5">
+    <div class="col-sm-4">
       <h2>Suggested songs</h2>
       <% @top_n_songs_recs.each do |song| %>
         <p>&ldquo;<%=song['song_name']%>&rdquo; by <%=song['name']%></p>
