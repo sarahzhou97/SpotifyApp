@@ -9,20 +9,20 @@
       <p>Analysis on the entire database across all users.</p>
     </center>
 
-     <%= column_chart({"Danceability" => @danceability*100, "Popularity" => @popularity, "Acousticness" => @acousticness*100, "Instrumentalness"=>@instrumentalness*100,"Energy" =>@energy*100,"Liveness"=>@liveness*100,"Loudness"=>(@loudness+60)/60*100,"Speechiness"=>@speechiness*100,"Tempo"=>@tempo},colors: ["#1DC465"], height:"250px", width: "100%") %>
+     <%= column_chart({"Danceability" => @danceability*100, "Popularity" => @popularity, "Acousticness" => @acousticness*100, "Instrumentalness"=>@instrumentalness*100,"Energy" =>@energy*100,"Liveness"=>@liveness*100,"Loudness"=>(@loudness+60)/60*100,"Tempo"=>@tempo},colors: ["#1DC465"], height:"250px", width: "100%") %>
   </div>
   
   <div class="row">
-    <div class="col-sm-8">
+    <div class="col-sm-6">
       <h3>Top Albums</h3>
       <ul>
         <% @top_n_albums_overall.each do |album| %>
-          <p>&ldquo;<%=album['album_name']%>&rdquo; - <%=album['name']%></p>
+          <p><%=album['album_name']%></p>
         <% end %>
       </ul>
     </div>
 
-    <div class="col-sm-4">
+    <div class="col-sm-6">
       <h3>Top Artists</h3>
       <ul>
         <% @top_n_artists_overall.each do |artist| %>
@@ -36,7 +36,7 @@
       <h3>Top Songs</h3>
       <ul>
         <% @top_n_tracks_overall.each do |track| %>
-          <p>&ldquo;<%=track['song_name']%>&rdquo; - <%=track['name']%></p>
+          <p><%=track['song_name']%></p>
         <% end %>
       </ul>
     </div>
