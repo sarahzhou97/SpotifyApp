@@ -176,14 +176,17 @@ end
 
     @top_n_users = ActiveRecord::Base.connection.execute(top_n_users_sql)
 
-    top_n_albums_sql = 'select t1.album_id, t1.album_name, count(*) from
-    (select albums.album_id,albums.album_name,s.track_id from 
+    top_n_albums_sql = 'select t1.album_id, t1.album_name, artists.name, count(*) from
+    artists, (select albums.album_id,albums.album_name, albums.artist_id, s.track_id from 
       (select * from saveds where saveds.user_id = ' +id+ '::varchar) s, tracks, albums
       where albums.album_id = tracks.album_id and tracks.track_id=s.track_id
     ) t1
-  group by t1.album_id,t1.album_name
+    where artists.artist_id=t1.artist_id
+  group by t1.album_id,t1.album_name, artists.name
   order by count desc
   limit ' +$num+ '::bigint;'
+
+  
 
   @top_n_albums = ActiveRecord::Base.connection.execute(top_n_albums_sql)
 
