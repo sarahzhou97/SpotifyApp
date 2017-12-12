@@ -152,15 +152,15 @@ end
   def run_queries_user(id)
 
 
-    @popularity_user = Saved.where(user_id: id).joins("INNER JOIN tracks on tracks.track_id = tracks.track_id").average("popularity")
-@danceability_user = Saved.where(user_id: id).joins("INNER JOIN tracks on tracks.track_id = tracks.track_id").average("danceability")
-@acousticness_user = Saved.where(user_id: id).joins("INNER JOIN tracks on tracks.track_id = tracks.track_id").average("acousticness")
-@instrumentalness_user = Saved.where(user_id: id).joins("INNER JOIN tracks on tracks.track_id = tracks.track_id").average("instrumentalness")
-@energy_user = Saved.where(user_id: id).joins("INNER JOIN tracks on tracks.track_id = tracks.track_id").average("energy")
-@liveness_user = Saved.where(user_id: id).joins("INNER JOIN tracks on tracks.track_id = tracks.track_id").average("liveness")
-@loudness_user = Saved.where(user_id: id).joins("INNER JOIN tracks on tracks.track_id = tracks.track_id").average("loudness")
-@tempo_user = Saved.where(user_id: id).joins("INNER JOIN tracks on tracks.track_id = tracks.track_id").average("tempo")
-@valence_user = Saved.where(user_id: id).joins("INNER JOIN tracks on tracks.track_id = tracks.track_id").average("valence")
+    @popularity_user = Saved.where(user_id: id).joins("INNER JOIN tracks on saveds.track_id = tracks.track_id").average("popularity")
+@danceability_user = Saved.where(user_id: id).joins("INNER JOIN tracks on saveds.track_id = tracks.track_id").average("danceability")
+@acousticness_user = Saved.where(user_id: id).joins("INNER JOIN tracks on saveds.track_id = tracks.track_id").average("acousticness")
+@instrumentalness_user = Saved.where(user_id: id).joins("INNER JOIN tracks on saveds.track_id = tracks.track_id").average("instrumentalness")
+@energy_user = Saved.where(user_id: id).joins("INNER JOIN tracks on saveds.track_id = tracks.track_id").average("energy")
+@liveness_user = Saved.where(user_id: id).joins("INNER JOIN tracks on saveds.track_id = tracks.track_id").average("liveness")
+@loudness_user = Saved.where(user_id: id).joins("INNER JOIN tracks on saveds.track_id = tracks.track_id").average("loudness")
+@tempo_user = Saved.where(user_id: id).joins("INNER JOIN tracks on saveds.track_id = tracks.track_id").average("tempo")
+@valence_user = Saved.where(user_id: id).joins("INNER JOIN tracks on saveds.track_id = tracks.track_id").average("valence")
 
 
     top_n_users_sql = 'select t2.user_id, name from (select t1.user_id from 
