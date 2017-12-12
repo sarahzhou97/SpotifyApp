@@ -138,6 +138,15 @@ end
   def run_queries_user(id)
 
 
+@popularity = Track.average("popularity")
+@danceability = Track.average("danceability")
+@acousticness = Track.average("acousticness")
+@instrumentalness = Track.average("instrumentalness")
+@energy = Track.average("energy")
+@liveness = Track.average("liveness")
+@loudness = Track.average("loudness")
+@tempo = Track.average("tempo")
+@valence = Track.average("valence")
 
 check_repeats_sql = 'select track_id, count(*) from tracks group by track_id having count(*)>1;'
  

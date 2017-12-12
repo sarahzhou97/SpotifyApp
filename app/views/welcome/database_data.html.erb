@@ -4,29 +4,12 @@
 
 <div class="col-sm-9">
   <div class="row jumbotron">
-    <h1>Hello, <%=$spotify_user.name%> </h1>
-    <p>Here's what we know about you so far:</p>
-    <div class="col-sm-4">
-      <%= pie_chart({"R&B" => 10, "Pop" => 5},
-                    height:"200px", 
-                    width: "100%", 
-                    donut: "true") %>
-    </div>
-    <div class="col-sm-4">
-      <%= line_chart({"Jan" => 10, "March" => 23, "July" => 123, "August" => 215, "October" => 34},
-                    height:"200px", 
-                    width: "100%") %>
-    </div>
-    <div class="col-sm-4">
-      <%= column_chart({"Jan" => 10, "March" => 23, "July" => 123, "August" => 215, "October" => 34},
-                      height:"200px", 
-                      width: "100%") %>
-    </div>
-  </div>
-  <div class="row">
+  <center>
+  <h1>Here's What We Know About All of Our Users</h1>
+  </center>
 
+     <div class="col-sm-5">
 
-    <div class="col-sm-4">
       <h3>Top Albums</h3>
       <ul>
         <% @top_n_albums_overall.each do |album| %>
@@ -36,7 +19,7 @@
     </div>
 
 
-    <div class="col-sm-4">
+    <div class="col-sm-5">
       <h3>Top Artists</h3>
       <ul>
         <% @top_n_artists_overall.each do |artist| %>
@@ -45,7 +28,7 @@
       </ul>
     </div>
 
-    <div class="col-sm-4">
+    <div class="col-sm-5">
       <h3>Top Songs</h3>
       <% @top_n_tracks_overall.each do |track| %>
   <p><%=track['song_name']%></p>
@@ -53,13 +36,12 @@
 <% end %>
     </div>
 
-     <div class="col-sm-4">
+     <div class="col-sm-5">
       <h3>Top Playlists</h3>
       <% @top_n_playlists_overall.each do |playlist| %>
   <p><%=playlist['playlist_name']%></p>
 <% end %>
     </div>
-
-
   </div>
+ 
 </div>
