@@ -1,7 +1,7 @@
 Project Checkpoint 2
 =====================
 
-##Progess: 
+##Progress: 
 Implemented database schema, tested database, started designing website (frontend), Used spotify API (rspotify) to gather user info and insert specific data in db. Used user Spotify authentication system to let users sign into their accounts.
 
 *Note: User must have Ruby, rbenv, postregesql, and Rails installed to run app. We recommend this resource: https://www.tutorialspoint.com/ruby-on-rails/rails-installation.html*
@@ -25,12 +25,5 @@ Implemented database schema, tested database, started designing website (fronten
 
 5. db under SpotifyApp/db/ populates with user info (local copy only, to be hosted on heroku)
 
-##Roles:
-
-* Emily: Designed new front end 
-* Luke: Test Queries/ Queries for getting data from the database
-* Nikhil: Connecting to spotify api, getting data from spotify, adjusting queries 
-* Sarah: Connecting to spotify api, getting data from spotify api; inserting from rspotify output to database; setting up rails routes, views, controller, models, and schemas
-* Zach: connecting to spotify api, getting data from spotify
 
 
