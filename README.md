@@ -1,7 +1,7 @@
 Musaic
 =====================
 
-[I'm an inline-style link with title](https://sleepy-fjord-10699.herokuapp.com/ "Heroku Link")
+[Try for Yourself on Heroku Here](https://sleepy-fjord-10699.herokuapp.com/ "Heroku Link")
 
 ##Introduction
 
