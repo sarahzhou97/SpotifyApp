@@ -8,7 +8,7 @@ class WelcomeController < ApplicationController
      $num = '3'
     $rec = 'Acousticness'
 
-    
+
 
   def index
     
@@ -51,7 +51,7 @@ class WelcomeController < ApplicationController
       $spotify_user = SpotifyUser.find(rspotify_user.id)
       
     else
-      $spotify_user = SpotifyUser.new(:user_id => rspotify_user.id,:name =>rspotify_user.display_name)
+      $spotify_user = SpotifyUser.new(:user_id => rspotify_user.id,:name =>rspotify_user.display_name, :country => rspotify_user.country)
       $spotify_user.save
 
        @playlists = rspotify_user.playlists(limit: 5)
