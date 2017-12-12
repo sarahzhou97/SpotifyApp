@@ -13,15 +13,15 @@
 
   <%= f.form_group :rec, label: { text: "Recommend Me Songs Based On:" } do %>
     <br>
-    <%= f.radio_button :popularity, "Acousticness", label: "Acousticness", checked: true, inline:true %>
-    <%= f.radio_button :popularity, "Danceability", label: "Danceability", inline:true %>
-    <%= f.radio_button :popularity, "Instrumentalness", label: "Instrumentalness", inline:true %>
-    <%= f.radio_button :popularity, "Energy", label: "Energy", inline:true %>
-    <%= f.radio_button :popularity, "Liveness", label: "Liveness", inline:true %>
-    <%= f.radio_button :popularity, "Loudness", label: "Loudness", inline:true %>
-    <%= f.radio_button :popularity, "Speechiness", label: "Speechiness (amount of human speech in songs)", inline:true %>
-    <%= f.radio_button :popularity, "Tempo", label: "Tempo (BPM)", inline:true %>
-    <%= f.radio_button :popularity, "Valence", label: "Valence", inline:true %>
+    <%= f.radio_button :rec, "Acousticness", label: "Acousticness", checked: true, inline:true %>
+    <%= f.radio_button :rec, "Danceability", label: "Danceability", inline:true %>
+    <%= f.radio_button :rec, "Instrumentalness", label: "Instrumentalness", inline:true %>
+    <%= f.radio_button :rec, "Energy", label: "Energy", inline:true %>
+    <%= f.radio_button :rec, "Liveness", label: "Liveness", inline:true %>
+    <%= f.radio_button :rec, "Loudness", label: "Loudness", inline:true %>
+    <%= f.radio_button :rec, "Speechiness", label: "Speechiness (amount of human speech in songs)", inline:true %>
+    <%= f.radio_button :rec, "Tempo", label: "Tempo (BPM)", inline:true %>
+    <%= f.radio_button :rec, "Valence", label: "Valence", inline:true %>
     <% end %>
 
     <%= f.submit %>
