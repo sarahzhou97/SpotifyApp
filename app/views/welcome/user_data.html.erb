@@ -11,8 +11,13 @@
       <center>
         <h2>Your Song Attributes</h2>
       </center>
-      <%= column_chart({"Danceability" => @danceability_user*100, "Popularity" => @popularity_user, "Acousticness" => @acousticness_user*100, "Instrumentalness"=>@instrumentalness_user*100,"Energy" =>@energy_user*100,"Liveness"=>@liveness_user*100,"Loudness"=>(@loudness_user+60)/60*100,"Tempo"=>@tempo_user},
+      <%if @danceability_user.blank? or @popularity_user.blank? or @acousticness_user.blank? or @instrumentalness_user.blank? or @energy_user.blank? or @liveness_user.blank? or @loudness_user.blank? or @tempo_user.blank?%>
+        <%= column_chart({"Danceability" => 45.698, "Popularity" => 35.45, "Acousticness" => 78.345, "Instrumentalness"=>24.567,"Energy" =>43.27,"Liveness"=>89.32,"Loudness"=>78.38,"Speechiness"=>57.38,"Tempo"=>99.53},
         height:"250px", width: "100%", colors: ["#1DC465"]) %>
+      <%else%>
+        <%= column_chart({"Danceability" => @danceability_user*100, "Popularity" => @popularity_user, "Acousticness" => @acousticness_user*100, "Instrumentalness"=>@instrumentalness_user*100,"Energy" =>@energy_user*100,"Liveness"=>@liveness_user*100,"Loudness"=>(@loudness_user+60)/60*100,"Speechiness"=>@speechiness_user*100,"Tempo"=>@tempo_user},
+        height:"250px", width: "100%", colors: ["#1DC465"]) %>
+      <%end%>
     </div>
     <div class="col-sm-4">
       <h2>Suggested songs</h2>
@@ -25,57 +30,69 @@
     </div>
 
   <div class="row">
-   <center>
-  <h2>Similar Users Based On:</h2>
-  </center>
   <div class="col-sm-4">
-      <h3>Saved Songs</h3>
+
+      <h3>Most Similar Users Based On Saved Songs</h3>
+
+      <% if !@top_n_users.any? %>
+        <p>No Users with Common Saved Songs</p>
+      <%else%>
       <ul>
-        <% @top_n_users.each do |user| %>
+        <% !@top_n_users.each do |user| %>
           <li><%=user['name']%></li>
         <% end %>
       </ul>
+      <% end %>
     </div>
 
     <div class="col-sm-4">
-      <h3>Playlists You Follow</h3>
+
+      <h3>Users Whose Playlists You Follow The Most</h3>
+
+    
+      <% if !@top_n_users_1.any? %>
+        <p>You Follow No Other Users' Playlists</p>
+      <%else%>
+
       <ul>
         <% @top_n_users_1.each do |user| %>
   <p><%=user['name']%></p>
 <% end %>
       </ul>
+      <% end %>
     </div>
 
     <div class="col-sm-4">
-      <h3>Playlists You Created</h3>
+
+      <h3>Users Who Follow Your Playlists The Most</h3>
+
+
+      <% if !@top_n_users_2.any? %>
+        <p>No One Follows Your Playlists</p>
+      <%else%>
+
       <ul>
         <% @top_n_users_2.each do |user| %>
   <p><%=user['name']%></p>
 <% end %>
       </ul>
+      <% end %>
     </div>
     </div>
 <div class="row">
     <center><h2>Other Data:</h2></center>
 
-    <div class="col-sm-4">
-      <h3>Top Songs</h3>
-      <ul>
-        <% @top_n_songs.each do |song| %>
-          <p><%=song['song_name']%></p>
-        <% end %>
-      </ul>
-    </div>
-    <div class="col-sm-4">
-      <h3>Top Albums</h3>
+    
+    <div class="col-sm-6">
+      <h3>Your Top Albums</h3>
       <ul>
         <% @top_n_albums.each do |album| %>
-          <p><%=album['album_name']%> - <%=album['artist_id']%></p>
+          <p>&ldquo;<%=album['album_name']%>&rdquo; - <%=album['name']%></p>
         <% end %>
       </ul>
     </div>
-    <div class="col-sm-4">
-      <h3>Top Artists</h3>
+    <div class="col-sm-6">
+      <h3>Your Top Artists</h3>
       <ul>
         <% @top_n_artists.each do |artist| %>
           <p><%=artist['name']%></p>

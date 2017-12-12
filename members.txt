@@ -3,8 +3,8 @@ Team Roles
 
 
 * Emily: Front end design + implementation for each page, added primary keys to schema, 
-* Luke: Queries 
-* Nikhil: Queries, Logo, Front end design
-* Sarah: Connecting to spotify api, getting data from spotify api; inserting from rspotify output to database; setting up rails routes, views, controller, models, and schemas; Queries; User preferences feature
+* Luke: SQL Queries, Graphs, Using preferences
+* Nikhil: SQL Queries, user-specified variable queries, Front end design, Logo design, oauth spotify verification, host timeout troubleshooting, functionality ideation
+* Sarah: Connecting to spotify api, getting data from spotify api; inserting from rspotify output to database; setting up rails routes, views, controller, models, and schemas; SQL Queries; User preferences feature
 * Zach: Graphs in front end, E/R database design
 

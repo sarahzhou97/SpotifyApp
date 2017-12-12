@@ -89,14 +89,15 @@ class WelcomeController < ApplicationController
 @energy = Track.average("energy")
 @liveness = Track.average("liveness")
 @loudness = Track.average("loudness")
+@speechiness = Track.average("speechiness")
 @tempo = Track.average("tempo")
 @valence = Track.average("valence")
 
 
-top_n_tracks_overall_sql = 'select t1.track_id, t1.song_name from
-    (select saveds.track_id, tracks.song_name, count(*) from saveds, tracks
-    where tracks.track_id=saveds.track_id
-    group by saveds.track_id, tracks.song_name
+top_n_tracks_overall_sql = 'select t1.track_id, t1.song_name, t1.name from
+    (select saveds.track_id, tracks.song_name, artists.name, count(*) from saveds, tracks, artists
+    where tracks.track_id=saveds.track_id and tracks.artist_id=artists.artist_id
+    group by saveds.track_id, tracks.song_name, artists.name
     order by count desc) t1
   limit ' +$num+ '::bigint;'
 
@@ -123,12 +124,14 @@ top_n_artists_overall_sql = 'select t1.artist_id, t1.name from
 
 @top_n_artists_overall = ActiveRecord::Base.connection.execute(top_n_artists_overall_sql)
 
-top_n_albums_overall_sql = 'select t1.album_name 
-  from (select album_name, count(*) as count
+top_n_albums_overall_sql = 'select t1.album_name, artists.name
+  from artists, (select album_name, albums.artist_id, count(*) as count
     from albums, tracks
     where albums.album_id=tracks.album_id
-    group by album_name
+    group by album_name, albums.artist_id
     order by count desc) as t1
+  where artists.artist_id=t1.artist_id
+  group by t1.album_name, artists.name
 limit ' +$num+ '::bigint;
 '
 
@@ -152,38 +155,55 @@ end
   def run_queries_user(id)
 
 
-    @popularity_user = Saved.where(user_id: id).joins("INNER JOIN tracks on tracks.track_id = tracks.track_id").average("popularity")
-@danceability_user = Saved.where(user_id: id).joins("INNER JOIN tracks on tracks.track_id = tracks.track_id").average("danceability")
-@acousticness_user = Saved.where(user_id: id).joins("INNER JOIN tracks on tracks.track_id = tracks.track_id").average("acousticness")
-@instrumentalness_user = Saved.where(user_id: id).joins("INNER JOIN tracks on tracks.track_id = tracks.track_id").average("instrumentalness")
-@energy_user = Saved.where(user_id: id).joins("INNER JOIN tracks on tracks.track_id = tracks.track_id").average("energy")
-@liveness_user = Saved.where(user_id: id).joins("INNER JOIN tracks on tracks.track_id = tracks.track_id").average("liveness")
-@loudness_user = Saved.where(user_id: id).joins("INNER JOIN tracks on tracks.track_id = tracks.track_id").average("loudness")
-@tempo_user = Saved.where(user_id: id).joins("INNER JOIN tracks on tracks.track_id = tracks.track_id").average("tempo")
-@valence_user = Saved.where(user_id: id).joins("INNER JOIN tracks on tracks.track_id = tracks.track_id").average("valence")
+    @popularity_user = Saved.where(user_id: id).joins("INNER JOIN tracks on saveds.track_id = tracks.track_id").average("popularity")
+@danceability_user = Saved.where(user_id: id).joins("INNER JOIN tracks on saveds.track_id = tracks.track_id").average("danceability")
+@acousticness_user = Saved.where(user_id: id).joins("INNER JOIN tracks on saveds.track_id = tracks.track_id").average("acousticness")
+@instrumentalness_user = Saved.where(user_id: id).joins("INNER JOIN tracks on saveds.track_id = tracks.track_id").average("instrumentalness")
+@energy_user = Saved.where(user_id: id).joins("INNER JOIN tracks on saveds.track_id = tracks.track_id").average("energy")
+@liveness_user = Saved.where(user_id: id).joins("INNER JOIN tracks on saveds.track_id = tracks.track_id").average("liveness")
+@speechiness_user = Saved.where(user_id: id).joins("INNER JOIN tracks on saveds.track_id = tracks.track_id").average("speechiness")
+@loudness_user = Saved.where(user_id: id).joins("INNER JOIN tracks on saveds.track_id = tracks.track_id").average("loudness")
+@tempo_user = Saved.where(user_id: id).joins("INNER JOIN tracks on saveds.track_id = tracks.track_id").average("tempo")
+@valence_user = Saved.where(user_id: id).joins("INNER JOIN tracks on saveds.track_id = tracks.track_id").average("valence")
 
 
+  # users with same saved songs
     top_n_users_sql = 'select t2.user_id, name from (select t1.user_id from 
     (select saveds.user_id, name, count(*) 
     from saveds, spotify_users 
     where saveds.user_id<> ' +id+ '::varchar and saveds.track_id in 
-      (select track_id from saveds where user_id = '+id+ '::varchar) and
-      spotify_users.user_id = saveds.user_id
+    (select track_id from saveds where user_id = '+id+ '::varchar) and
+    spotify_users.user_id = saveds.user_id
     group by saveds.user_id, name
     order by count desc) t1) as t2, spotify_users
     where spotify_users.user_id = t2.user_id
-  limit ' +$num+ '::bigint;'
+    limit ' +$num+ '::bigint;'
+
+  # users with similar playlisted songs
+    top_n_users_playlistsongs_sql = 'select t2.user_id, name from (select t1.user_id from 
+    (select saveds.user_id, name, count(*) 
+    from tracks, playlists, playlist_contains, spotify_users
+    where saveds.user_id<> ' +id+ '::varchar and saveds.track_id in 
+    (select track_id from saveds where user_id = '+id+ '::varchar) and
+    spotify_users.user_id = saveds.user_id
+    group by saveds.user_id, name
+    order by count desc) t1) as t2, spotify_users
+    where spotify_users.user_id = t2.user_id
+    limit ' +$num+ '::bigint;'
 
     @top_n_users = ActiveRecord::Base.connection.execute(top_n_users_sql)
 
-    top_n_albums_sql = 'select t1.album_id, t1.album_name, count(*) from
-    (select albums.album_id,albums.album_name,s.track_id from 
+    top_n_albums_sql = 'select t1.album_id, t1.album_name, artists.name, count(*) from
+    artists, (select albums.album_id,albums.album_name, albums.artist_id, s.track_id from 
       (select * from saveds where saveds.user_id = ' +id+ '::varchar) s, tracks, albums
       where albums.album_id = tracks.album_id and tracks.track_id=s.track_id
     ) t1
-  group by t1.album_id,t1.album_name
+    where artists.artist_id=t1.artist_id
+  group by t1.album_id,t1.album_name, artists.name
   order by count desc
   limit ' +$num+ '::bigint;'
+
+
 
   @top_n_albums = ActiveRecord::Base.connection.execute(top_n_albums_sql)
 
@@ -197,11 +217,11 @@ end
   @top_n_artists = ActiveRecord::Base.connection.execute(top_n_artists_sql)
 
  top_n_songs_recs_sql = 'select tracks.song_name, artists.name
-  from tracks, saveds, playlists, playlist_contains, artists,
+  from tracks, playlists, playlist_contains, artists,
     (select avg(tracks.'+$rec+') as attri
-     from tracks, saveds, playlists, playlist_contains
-     where (tracks.track_id=saveds.track_id and saveds.user_id='+id+'::varchar) or (tracks.track_id=playlist_contains.track_id  and playlists.creator_id='+id+'::varchar and playlists.playlist_id=playlist_contains.playlist_id)) as t1
-  where ((tracks.track_id=saveds.track_id and saveds.user_id<>'+id+'::varchar) or (tracks.track_id=playlist_contains.track_id  and playlists.creator_id<>'+id+'::varchar and playlists.playlist_id=playlist_contains.playlist_id)) and (tracks.artist_id=artists.artist_id)
+     from tracks, playlists, playlist_contains
+     where (tracks.track_id=playlist_contains.track_id  and playlists.creator_id='+id+'::varchar and playlists.playlist_id=playlist_contains.playlist_id)) as t1
+  where ((tracks.track_id=playlist_contains.track_id  and playlists.creator_id<>'+id+'::varchar and playlists.playlist_id=playlist_contains.playlist_id)) and (tracks.artist_id=artists.artist_id)
     group by tracks.song_name, artists.name, tracks.'+$rec+', t1.attri
     order by abs(t1.attri-tracks.'+$rec+') ASC
     limit ' +$num+ '::bigint;'
@@ -216,11 +236,11 @@ top_n_users_1_sql = 'select t1.creator_id, spotify_users.name from
 (select creator_id from
     (select creator_id, count(*)
       from playlists
-      where playlists.playlist_id in
+      where playlists.creator_id <>'+id+'::varchar and playlists.playlist_id in
         (select follows_playlists.playlist_id from follows_playlists where '+id+ '::varchar = follows_playlists.user_id)
       group by creator_id
       order by count desc) as foo) as t1, spotify_users
-      where t1.creator_id = spotify_users.name
+      where t1.creator_id = spotify_users.user_id
   limit ' +$num+ '::bigint;'
 
   @top_n_users_1 = ActiveRecord::Base.connection.execute(top_n_users_1_sql)

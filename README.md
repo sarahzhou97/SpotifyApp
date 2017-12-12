@@ -6,9 +6,58 @@ Musaic
 Musaic is a Spotify analyzer application that allows users sign into their Spotify accounts to see interesting analyses about their music tastes, get song recommendations based on specified song attributes, and how they compare to other users in the database.
 
 ##Preview
-![picture](img/home.png)
+![picture](img/signin.png)
+![picture](img/name.png)
+![picture](img/user.png)
+![picture](img/global.png)
+![picture](img/preferences.png)
 
-![picture](img/queryresults.png)
+##E/R Diagram
+![picture](img/erdiagram.png)
+
+##Assumptions
+
+A user can follow many playlists. A playlist can be followed by many users. A playlist can be created by one person. A user can save many tracks and a track can be saved by many users. Each track/album has attribute artistid that indicates they can be by only one artist. A playlist can contain many tracks and a track can be contained by many playlists. Each track is guaranteed to have one album and one artist it belongs to. 
+
+##Descriptions
+
+Albums(album_id, album_type, artist_id, genre, release_date, album_name, popularity)
+
+* Each tuple represents an album
+* artist_id indicates artist of the album (references artist)
+ 
+Artists(artist_id, name, popularity, genre)
+
+* Each tuple represents an artist 
+
+Follows_Playlists(user_id, playlist_id)
+
+* Each tuple represents one user following one playlist
+
+Playlist_Contains(playlist_id, track_id)
+
+* Each tuple represents one playlist containing one track 
+
+Playlists(playlist_id, creator_id, playlist_name)
+
+* Each tuple represents one playlist
+* creator id indicates user id that created the playlist (does not reference User.user_id)
+
+Saveds(user_id, track_id)
+
+* Each tuple represents one user that saves one track
+ 
+Spotify_Users(user_id, birthdate, country, name)
+
+* Each tuple represents one user
+
+
+Tracks(track_id, album_id, song_name, popularity, artist_id, acousticness, danceability, energy, key, liveness, loudness, mode, speechiness, tempo, time_signature, valence)
+
+* Each tuple represents one track
+* album_id represents album of track(references album)
+* artist_id represents artist of track(references artist)
+
 
 ##To Run
 
