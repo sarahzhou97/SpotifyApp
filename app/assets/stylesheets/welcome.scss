@@ -40,6 +40,9 @@ html, body, .container {
 	background-color: var(--greyy);
 }
 
+.container .jumbotron {
+	padding: 30px;
+}
 .jumbotron {
 	color: var(--fnt);
 	background-color: none;
@@ -48,6 +51,14 @@ html, body, .container {
 
 .row .jumbotron {
 	margin-right: 15px;
+}
+
+.jumbotron h1 {
+	font-size: 36px;
+}
+
+.jumbo-p {
+	font-size: 16px;
 }
 
 .logo {

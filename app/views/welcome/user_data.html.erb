@@ -5,19 +5,28 @@
 
 
 <div class="col-sm-9">
-  <div class="row jumbotron">
-    <center>
-    <h1>Average Song Attribute Values</h1>
-    </center>
-   <%= column_chart({"Danceability" => @danceability_user*100, "Popularity" => @popularity_user, "Acousticness" => @acousticness_user*100, "Instrumentalness"=>@instrumentalness_user*100,"Energy" =>@energy_user*100,"Liveness"=>@liveness_user*100,"Loudness"=>(@loudness_user+60)/60*100,"Tempo"=>@tempo_user},
-                      height:"400px", 
-                      width: "100%") %>
-  
+  <div class="jumbotron">
+    <div class="row">
+      <div class = "col-sm-7">
+      <center>
+        <h2>Your Song Attributes</h2>
+      </center>
+      <%= column_chart({"Danceability" => @danceability_user*100, "Popularity" => @popularity_user, "Acousticness" => @acousticness_user*100, "Instrumentalness"=>@instrumentalness_user*100,"Energy" =>@energy_user*100,"Liveness"=>@liveness_user*100,"Loudness"=>(@loudness_user+60)/60*100,"Tempo"=>@tempo_user},
+        height:"250px", width: "100%") %>
+    </div>
+    <div class="col-sm-5">
+      <h2>Suggested songs</h2>
+      <% @top_n_songs_recs.each do |song| %>
+        <p>&ldquo;<%=song['song_name']%>&rdquo; by <%=song['name']%></p>
+      <% end %>
+      <p class= "jumbo-p">*based on <%=$rec%></p>
+    </div>
   </div>
+    </div>
 
   <div class="row">
    <center>
-  <h1>Most Similar Users Based On:</h1>
+  <h2>Similar Users Based On:</h2>
   </center>
   <div class="col-sm-4">
       <h3>Saved Songs</h3>
@@ -47,13 +56,19 @@
     </div>
     </div>
 <div class="row">
-    <h2>Other Data:</h2>
+    <center><h2>Other Data:</h2></center>
 
     <div class="col-sm-4">
+      <h3>Top Songs</h3>
+      <ul>
+        <% @top_n_songs.each do |song| %>
+          <p><%=song['song_name']%></p>
+        <% end %>
+      </ul>
       <h3>Top Albums</h3>
       <ul>
         <% @top_n_albums.each do |album| %>
-          <p><%=album['album_name']%></p>
+          <p><%=album['album_name']%> - <%=album['artist_id']%></p>
         <% end %>
       </ul>
     </div>
@@ -64,25 +79,14 @@
           <p><%=artist['name']%></p>
         <% end %>
       </ul>
-    </div>
-
-    
-
-    
-  </div>
-
-  <div class = "row">
-
-   <h2>Song Recommendations Based on <%=$rec%>:</h2>
-
-  <div class="col-sm-4">
-      <h3>Top Songs</h3>
-      <% @top_n_songs_recs.each do |song| %>
-        <p>&ldquo;<%=song['song_name']%>&rdquo; by <%=song['name']%></p>
-      <% end %>
-    </div>
-
+    </div>    
   </div>
 </div>
 
 
+
+    
+
+</div>
+
+  
