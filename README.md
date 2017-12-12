@@ -6,9 +6,11 @@ Musaic
 Musaic is a Spotify analyzer application that allows users sign into their Spotify accounts to see interesting analyses about their music tastes, get song recommendations based on specified song attributes, and how they compare to other users in the database.
 
 ##Preview
-![picture](img/home.png)
-
-![picture](img/queryresults.png)
+![picture](img/signin.png)
+![picture](img/name.png)
+![picture](img/user.png)
+![picture](img/global.png)
+![picture](img/preferences.png)
 
 ##To Run
 
