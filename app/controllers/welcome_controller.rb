@@ -152,7 +152,7 @@ end
   def run_queries_user(id)
 
 
-    @popularity_user = Saved.where(user_id: id).joins("INNER JOIN tracks on tracks.track_id = tracks.track_id").average("popularity")
+@popularity_user = Saved.where(user_id: id).joins("INNER JOIN tracks on tracks.track_id = tracks.track_id").average("popularity")
 @danceability_user = Saved.where(user_id: id).joins("INNER JOIN tracks on tracks.track_id = tracks.track_id").average("danceability")
 @acousticness_user = Saved.where(user_id: id).joins("INNER JOIN tracks on tracks.track_id = tracks.track_id").average("acousticness")
 @instrumentalness_user = Saved.where(user_id: id).joins("INNER JOIN tracks on tracks.track_id = tracks.track_id").average("instrumentalness")
@@ -162,17 +162,29 @@ end
 @tempo_user = Saved.where(user_id: id).joins("INNER JOIN tracks on tracks.track_id = tracks.track_id").average("tempo")
 @valence_user = Saved.where(user_id: id).joins("INNER JOIN tracks on tracks.track_id = tracks.track_id").average("valence")
 
-
+  # users with same saved songs
     top_n_users_sql = 'select t2.user_id, name from (select t1.user_id from 
     (select saveds.user_id, name, count(*) 
     from saveds, spotify_users 
     where saveds.user_id<> ' +id+ '::varchar and saveds.track_id in 
-      (select track_id from saveds where user_id = '+id+ '::varchar) and
-      spotify_users.user_id = saveds.user_id
+    (select track_id from saveds where user_id = '+id+ '::varchar) and
+    spotify_users.user_id = saveds.user_id
     group by saveds.user_id, name
     order by count desc) t1) as t2, spotify_users
     where spotify_users.user_id = t2.user_id
-  limit ' +$num+ '::bigint;'
+    limit ' +$num+ '::bigint;'
+
+  # users with similar playlisted songs
+    top_n_users_playlistsongs_sql = 'select t2.user_id, name from (select t1.user_id from 
+    (select saveds.user_id, name, count(*) 
+    from tracks, playlists, playlist_contains, spotify_users
+    where saveds.user_id<> ' +id+ '::varchar and saveds.track_id in 
+    (select track_id from saveds where user_id = '+id+ '::varchar) and
+    spotify_users.user_id = saveds.user_id
+    group by saveds.user_id, name
+    order by count desc) t1) as t2, spotify_users
+    where spotify_users.user_id = t2.user_id
+    limit ' +$num+ '::bigint;'
 
     @top_n_users = ActiveRecord::Base.connection.execute(top_n_users_sql)
 

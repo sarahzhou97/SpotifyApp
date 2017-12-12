@@ -25,11 +25,8 @@
     </div>
 
   <div class="row">
-   <center>
-  <h2>Similar Users Based On:</h2>
-  </center>
   <div class="col-sm-4">
-      <h3>Saved Songs</h3>
+      <h3>Most Similar Users Based On Saved Songs</h3>
       <ul>
         <% @top_n_users.each do |user| %>
           <li><%=user['name']%></li>
@@ -38,7 +35,7 @@
     </div>
 
     <div class="col-sm-4">
-      <h3>Playlists You Follow</h3>
+      <h3>Users Whose Playlists You Follow The Most</h3>
       <ul>
         <% @top_n_users_1.each do |user| %>
   <p><%=user['name']%></p>
@@ -47,7 +44,7 @@
     </div>
 
     <div class="col-sm-4">
-      <h3>Playlists You Created</h3>
+      <h3>Users Who Follow Your Playlists The Most</h3>
       <ul>
         <% @top_n_users_2.each do |user| %>
   <p><%=user['name']%></p>
